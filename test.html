@@ -7,6 +7,26 @@
 <!--<![endif]-->
 
 <head>
+<style>
+.left{
+margin-left:45px;
+
+}
+
+
+.button {
+    background-color: #4d004d;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 19px;
+    margin: 5px 3px;
+    cursor: pointer;
+}
+</style>
 <meta charset="utf-8">
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -83,23 +103,31 @@ var x = setInterval(function() {
 <!-- header section -->
 <!-- description text section -->
 <section id="inner-description" class="section inner-description">
-  <div class="container">
-    <div class="col-md-10 col-md-offset-1 text-center">
-      <!--contact form start-->
-      <div class="col-md-6 col-md-offset-3 conForm">
-        <div id="message"></div>
+
         <form method="post" action="php/contact.php" name="cform" id="cform">
 
-          <input name="name" id="name" type="text" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" placeholder="Your name..." >
+          <!-- <input name="name" id="name" type="text" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" placeholder="Your name..." >
           <input name="email" id="email" type="email" class=" col-xs-12 col-sm-12 col-md-12 col-lg-12 noMarr" placeholder="Email Address..." >
-          <textarea name="comments" id="comments" cols="" rows="" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" placeholder="Project Details..."></textarea>
-          <input type="submit" id="submit" name="send" class="submitBnt" value="Send">
+          <textarea name="comments" id="comments" cols="" rows="" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" placeholder="Project Details..."></textarea> -->
+<div class="left">
+		 <h3>1. What is a process and process table? </h3>
+		
+				<textarea name="q1" id="q1" cols="100" rows="5" ></textarea>
+<br>
+		<h3>2. What are the differences between process and thread? </h3>
+			<textarea name="q2" id="q2" cols="100" rows="5" ></textarea><br>
+		<h3>3. What are the necessary conditions for deadlock? </h3>
+			<textarea name="q3" id="q3" cols="100" rows="5"></textarea><br>
+		<h3>4. Differences between mutex and semphore? </h3>
+			<textarea name="q4" id="q4" cols="100" rows="5"></textarea><br>
+		<h3>5. What are different states of process </h3>
+			<textarea name="q5" id="q5" cols="100" rows="5"></textarea>	
+			<br><br><br>
+		  <input class="button" type="submit" id="submit" name="Submit" class="submitBnt" value="Send">
           <div id="simple-msg"></div>
         </form>
-      </div>
-      <!--contact form end-->
-    </div>
-  </div>
+
+</div>    
 </section>
 <!-- description text section -->
 <!-- footer -->
