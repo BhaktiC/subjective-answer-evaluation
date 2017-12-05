@@ -39,16 +39,15 @@ margin-left:135px;
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
 <script>
-// Set the date we're counting down to
-// Edited by Aakash -
-// Down date set to 10:30 (tonight) for now, Will take a variable later.
-var countDownDate = new Date("Dec 5, 2017 15:30:25").getTime();
 
-// Update the count down every 1 second
+var start = new Date();
+//adding two hours to start time
+var countDownDate = new Date();
+countDownDate.setMinutes( start.getMinutes() + 120 )
 var x = setInterval(function() {
 
     // Get todays date and time
-    var now = new Date().getTime();
+    var now = new Date();
 
     // Find the distance between now an the count down date
     var distance = countDownDate - now;

@@ -1,5 +1,6 @@
 from django.shortcuts import render_to_response
 from django.shortcuts import render
+from django.template import loader
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -8,9 +9,9 @@ from django.template import RequestContext
 from short_answer.forms import UserForm, UserProfileForm
 from django.contrib.auth import logout
 from short_answer.models import UserProfile
+import driver
 import knn
 import CosineDistance
-
 
 
 def index(request):
@@ -107,7 +108,13 @@ def addqs(request):
 
 def viewscore(request):
             stud_ans = request.POST.get('ans1')
-            return HttpResponse(CosineDistance.main(stud_ans))
+            template = loader.get_template('short_answer/viewscore.html')
+            scores = driver.main(stud_ans)
+            context = {
+        'scores': scores,
+    }
+            return HttpResponse(template.render(context, request))
+
 
 
 @login_required
