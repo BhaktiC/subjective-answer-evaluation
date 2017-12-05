@@ -80,7 +80,7 @@ def main(stud_ans):
     print vectors[result]
     print "Result using knn"
     print scores[result]
-    return scores[result]
+    return float(scores[result])
     
     #print vectors[result], stud_vector
 
