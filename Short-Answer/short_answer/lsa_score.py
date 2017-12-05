@@ -14,7 +14,7 @@ show the improvement.
 
 import time
 import csv
-
+import os.path
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import TruncatedSVD
@@ -29,11 +29,12 @@ from sklearn.neighbors import KNeighborsClassifier
 def main(stud_ans):
 
     X_train_raw = []
-    y_train_labels = [] 
+    y_train_labels = []
     X_test_raw = []
     y_test_labels = []
 
-    with open("train2.csv") as tsvfile:
+    BASE = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(BASE, "train2.csv")) as tsvfile:
         tsvreader = csv.reader(tsvfile, delimiter="\t")
         for line in tsvreader:
             if line[1] != "5":
@@ -56,13 +57,13 @@ def main(stud_ans):
 #   - Filters out terms that occur in more than half of the docs (max_df=0.5)
 #   - Filters out terms that occur in only one document (min_df=2).
 #   - Selects the 10,000 most frequently occuring words in the corpus.
-#   - Normalizes the vector (L2 norm of 1.0) to normalize the effect of 
-#     document length on the tf-idf values. 
+#   - Normalizes the vector (L2 norm of 1.0) to normalize the effect of
+#     document length on the tf-idf values.
     vectorizer = TfidfVectorizer(max_df=0.5, max_features=10000,
                              min_df=2, stop_words='english',
                              use_idf=True)
 
-# Build the tfidf vectorizer from the training data ("fit"), and apply it 
+# Build the tfidf vectorizer from the training data ("fit"), and apply it
 # ("transform").
     X_train_tfidf = vectorizer.fit_transform(X_train_raw)
 
@@ -96,10 +97,10 @@ def main(stud_ans):
     print("\nClassifying tfidf vectors...")
 
 
-# Build a k-NN classifier. Use k = 5 (majority wins), the cosine distance, 
+# Build a k-NN classifier. Use k = 5 (majority wins), the cosine distance,
 # and brute-force calculation of distances.
     knn_tfidf = KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='cosine')
-    knn_tfidf.fit(X_train_tfidf, y_train)   
+    knn_tfidf.fit(X_train_tfidf, y_train)
 
     p = []
 # Classify the test vectors.
@@ -110,7 +111,7 @@ def main(stud_ans):
 
     print("\nClassifying LSA vectors...")
 
-# Build a k-NN classifier. Use k = 5 (majority wins), the cosine distance, 
+# Build a k-NN classifier. Use k = 5 (majority wins), the cosine distance,
 # and brute-force calculation of distances.
     knn_lsa = KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='cosine')
     knn_lsa.fit(X_train_lsa, y_train)
@@ -125,6 +126,3 @@ def main(stud_ans):
 if __name__ == "__main__":
     stud_ans = raw_input("Enter answer: ")
     main(stud_ans)
-
-
-

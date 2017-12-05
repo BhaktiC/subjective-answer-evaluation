@@ -7,6 +7,13 @@
 <!--<![endif]-->
 
 <head>
+
+  <script>
+  // function confirm(){
+  //   alert("Are you sure you want to start the test? Once the test begins, you are not permitted to press back or refresh. Click Ok to start the test");
+  //
+  // }
+  </script>
 <meta charset="utf-8">
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,7 +50,7 @@
     <div class="col-md-10 col-md-offset-1">
       <div class="banner-text text-center">
         <h1>Welcome!</h1><br><br>
-        <a href="/short_answer/test/"><span class="btn">I'm Ready! Take me to the test.</span></a>
+        <a href="/short_answer/test/"><span class="btn" onclick="if (confirm('Are you sure you want to start the test? Once the test begins, you are not permitted to press back or refresh. Click Ok to start the test')) return true; return false">I'm Ready! Take me to the test.</span></a>
         <!-- banner text -->
       </div>
     </div>

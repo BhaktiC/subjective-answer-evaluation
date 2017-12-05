@@ -43,7 +43,7 @@ margin-left:135px;
 var start = new Date();
 //adding two hours to start time
 var countDownDate = new Date();
-countDownDate.setMinutes( start.getMinutes() + 120 )
+countDownDate.setMinutes( start.getMinutes() + 30 )
 var x = setInterval(function() {
 
     // Get todays date and time
@@ -57,15 +57,16 @@ var x = setInterval(function() {
     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-    // Output the result in an element with id="demo"
     document.getElementById("timer").innerHTML = hours + "h "
     + minutes + "m " + seconds + "s ";
 
     // If the count down is over, write some text
-    if (distance < 0) {
+    if (distance <= 0) {
         clearInterval(x);
-        document.getElementById("demo").innerHTML = "EXPIRED";
-    }
+        alert("Time up! Press Ok to submit.");
+        document.getElementById("cform").submit();
+
+      }
 }, 1000);
 </script>
 
@@ -79,13 +80,13 @@ var x = setInterval(function() {
     <!-- navigation section  -->
     <div class="header-content clearfix">
       <span class="logo" id="timer"></span>
-      <nav class="navigation" role="navigation">
+      <!-- <nav class="navigation" role="navigation">
         <ul class="primary-nav">
           <li><a href="/short_answer/shome/">Home</a></li>
           <li><a href="about.html">About Us</a></li>
           <li><a href="/short_answer/logout/">Logout</a></li>
         </ul>
-      </nav>
+      </nav> -->
       <a href="#" class="nav-toggle">Menu<span></span></a> </div>
     <!-- navigation section  -->
   </header>
@@ -145,22 +146,13 @@ var x = setInterval(function() {
 </footer>
 <!-- footer -->
 
-<script>
-
-function done(){
-alert("Your answers were successfully submitted");
-}
-
-</script>
-
 <!-- JS FILES -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery.fancybox.pack.js"></script>
-<script src="js/jquery.waypoints.min.js"></script>
-<script src="js/retina.min.js"></script>
-<script src="js/modernizr.js"></script>
-<script src="js/jquery.contact.js"></script>
-<script src="js/main.js"></script>
+<script src="../../static/js/bootstrap.min.js"></script>
+<script src="../../static/js/jquery.fancybox.pack.js"></script>
+<script src="../../static/js/jquery.waypoints.min.js"></script>
+<script src="../../static/js/retina.min.js"></script>
+<script src="../../static/js/modernizr.js"></script>
+<script src="../../static/js/main.js"></script>
 </body>
 </html>
