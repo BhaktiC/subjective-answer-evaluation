@@ -52,7 +52,7 @@ if __name__ == "__main__":
 def main(stud_ans):
     testdata = []
     scores = []
-    with open("train.tsv") as tsvfile:
+    with open("train2.csv") as tsvfile:
         tsvreader = csv.reader(tsvfile, delimiter="\t")
         for line in tsvreader:
             if line[1] != "5":

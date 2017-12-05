@@ -33,7 +33,7 @@ def main(stud_ans):
     X_test_raw = []
     y_test_labels = []
 
-    with open("train.tsv") as tsvfile:
+    with open("train2.csv") as tsvfile:
         tsvreader = csv.reader(tsvfile, delimiter="\t")
         for line in tsvreader:
             if line[1] != "5":
@@ -99,7 +99,7 @@ def main(stud_ans):
 # Build a k-NN classifier. Use k = 5 (majority wins), the cosine distance, 
 # and brute-force calculation of distances.
     knn_tfidf = KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='cosine')
-    knn_tfidf.fit(X_train_tfidf, y_train)
+    knn_tfidf.fit(X_train_tfidf, y_train)   
 
     p = []
 # Classify the test vectors.
