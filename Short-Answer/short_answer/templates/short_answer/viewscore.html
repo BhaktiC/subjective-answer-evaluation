@@ -1,0 +1,47 @@
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<table>
+  <tr>
+    <th>Evaluation Technique</th>
+    <th>Score</th>
+  </tr>
+  <tr>
+    <td>Keyword Matching</td>
+    <td>{{ scores.0 }}</td>
+  </tr>
+  <tr>
+    <td>Cosine Similarity</td>
+    <td>{{ scores.1 }}</td>
+  </tr>
+  <tr>
+    <td>K Nearest Neighbours</td>
+    <td>{{ scores.2 }}</td>
+  </tr>
+  <tr>
+    <td>LSA(Latent Semantic Analysis)</td>
+    <td>{{ scores.3 }}</td>
+  </tr>
+  <tr>
+    <td>TF-IDF</td>
+    <td>{{ scores.4 }}</td>
+  </tr>
+
+</table>

@@ -1,6 +1,8 @@
 import CosineDistance as cd
 import math
 import csv
+import os.path
+
 
 def get_closest_dist(vectors, scores):
     max = -1
@@ -38,7 +40,7 @@ def tfidf(vectors, termcount):
     m = len(vectors)
     for vector in vectors:
         n = len(vector)
-        for term in vector:  
+        for term in vector:
             tf = vector[term]
             idf = math.log(m/termcount[term])
             vector[term] = tf * idf
@@ -52,7 +54,8 @@ if __name__ == "__main__":
 def main(stud_ans):
     testdata = []
     scores = []
-    with open("train.tsv") as tsvfile:
+    BASE = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(BASE, "train.tsv")) as tsvfile:
         tsvreader = csv.reader(tsvfile, delimiter="\t")
         for line in tsvreader:
             if line[1] != "5":
@@ -68,10 +71,10 @@ def main(stud_ans):
         model_vector = cd.generate_vector(stemmed_sentence)
         vectors.append(model_vector)
     stud_ans = cd.remove_punctuation(stud_ans)
-    word_tokens = cd.word_tokenize(stud_ans) 
+    word_tokens = cd.word_tokenize(stud_ans)
     filtered_sentence = cd.remove_stopwords(word_tokens)
     stemmed_sentence = cd.autocorrect_and_stem(filtered_sentence)
-    stud_vector = cd.generate_vector(stemmed_sentence) 
+    stud_vector = cd.generate_vector(stemmed_sentence)
     vectors.append(stud_vector)
     termcount = get_term_count(vectors)
     vectors = tfidf(vectors, termcount)
@@ -81,6 +84,5 @@ def main(stud_ans):
     print "Result using knn"
     print scores[result]
     return float(scores[result])
-    
-    #print vectors[result], stud_vector
 
+    #print vectors[result], stud_vector
