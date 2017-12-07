@@ -106,6 +106,7 @@ def main(stud_ans):
 # Classify the test vectors.
     p.extend(knn_tfidf.predict(X_test_tfidf))
     print "answers tfidf"
+    float(p[0])
     print p[0]
 
 
@@ -119,6 +120,7 @@ def main(stud_ans):
 # Classify the test vectors.
     p.extend(knn_lsa.predict(X_test_lsa))
     print "answers lsa"
+    float(p[1])
     print p[1]
 
     return p

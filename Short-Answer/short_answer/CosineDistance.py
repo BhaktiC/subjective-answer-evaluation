@@ -63,7 +63,7 @@ def synonym_merge(vector1, vector2):
         stemmedkey = ps.stem(key)
         if stemmedkey in vector2:
             continue
-    
+
         synonyms = get_synonyms(key)
         for sy in synonyms:
             count = 0
@@ -87,7 +87,7 @@ def get_cosine_dist(vector1, vector2):
             return prod/(mag1*mag2)
         except ZeroDivisionError:
             return 0
-       
+
 
 def main(stud_ans):
 
@@ -115,3 +115,8 @@ def main(stud_ans):
     result = round(result*3,0)
     print result
     return result
+
+
+if __name__ == "__main__":
+    stud_ans = raw_input("Enter answer: ")
+    main(stud_ans)
