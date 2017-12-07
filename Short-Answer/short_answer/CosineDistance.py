@@ -85,8 +85,10 @@ def get_cosine_dist(vector1, vector2):
             prod = prod + vector1[key]*vector2[key]
     mag1 = get_magnitude(vector1)
     mag2 = get_magnitude(vector2)
-    prod = prod/(mag1*mag2)
-    return prod
+    try:
+        return prod/(mag1*mag2)
+    except ZeroDivisionError:
+        return 0
 
 
 
