@@ -19,10 +19,10 @@ def main(s):
     s_filtered = cs.autocorrect_and_stem(s_filtered)
 
 
-    print "Keywords of Teacher's answer"     
-    print t_filtered
-    print "Keywords of Student's answer"
-    print s_filtered
+    #print "Keywords of Teacher's answer"     
+    #print t_filtered
+    #print "Keywords of Student's answer"
+    #print s_filtered
 
 
     list_t1 = []
@@ -32,9 +32,9 @@ def main(s):
             c = c + 1
             
             
-    print "Final Score"
+    #print "Final Score"
     c1 = c/len(t_filtered)
-    print round(c1 * 3)
+    #print "keyword", round(c1 * 3)
     return round(c1 * 3)
 
 

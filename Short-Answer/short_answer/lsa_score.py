@@ -15,6 +15,7 @@ show the improvement.
 import time
 import csv
 import os.path
+import read_data as rd
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import TruncatedSVD
@@ -26,26 +27,18 @@ from sklearn.neighbors import KNeighborsClassifier
 ###############################################################################
 #  Load the raw text dataset.
 ###############################################################################
+#def calc_score_tfidf(ans):
+
+#def calc_score_lsa(ans):
+
 def main(stud_ans):
 
-    X_train_raw = []
-    y_train_labels = []
+    op = rd.read_data("train.tsv")
+    X_train_raw = op[0]
+    y_train_labels = op[1]
     X_test_raw = []
-    y_test_labels = []
 
-    BASE = os.path.dirname(os.path.abspath(__file__))
-    with open(os.path.join(BASE, "train2.csv")) as tsvfile:
-        tsvreader = csv.reader(tsvfile, delimiter="\t")
-        for line in tsvreader:
-            if line[1] != "5":
-                break
-            X_train_raw.append(str(line[4]))
-            y_train_labels.extend(line[2])
-
-    X_test_raw.append(stud_ans)
-    #y_test_labels.extend(line[0])
-
-
+    X_test_raw.extend(stud_ans)
     y_train = y_train_labels
 
 
@@ -59,17 +52,17 @@ def main(stud_ans):
 #   - Selects the 10,000 most frequently occuring words in the corpus.
 #   - Normalizes the vector (L2 norm of 1.0) to normalize the effect of
 #     document length on the tf-idf values.
-    vectorizer = TfidfVectorizer(max_df=0.5, max_features=10000,
-                             min_df=2, stop_words='english',
+    vectorizer = TfidfVectorizer(max_df=1.0, max_features=10000,
+                             min_df=2, stop_words='english', ngram_range=(1, 2),
                              use_idf=True)
 
 # Build the tfidf vectorizer from the training data ("fit"), and apply it
 # ("transform").
     X_train_tfidf = vectorizer.fit_transform(X_train_raw)
 
-    print("  Actual number of tfidf features: %d" % X_train_tfidf.get_shape()[1])
+    #print("  Actual number of tfidf features: %d" % X_train_tfidf.get_shape()[1])
 
-    print("\nPerforming dimensionality reduction using LSA")
+    #print("\nPerforming dimensionality reduction using LSA")
 
 # Project the tfidf vectors onto the first N principal components.
 # Though this is significantly fewer features than the original tfidf vector,
@@ -82,7 +75,7 @@ def main(stud_ans):
 
 
     explained_variance = svd.explained_variance_ratio_.sum()
-    print("  Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
+    #print("  Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
 
 
 # Now apply the transformations to the test data as well.
@@ -94,23 +87,23 @@ def main(stud_ans):
 #  Run classification of the test articles
 ###############################################################################
 
-    print("\nClassifying tfidf vectors...")
+    #print("\nClassifying tfidf vectors...")
 
 
 # Build a k-NN classifier. Use k = 5 (majority wins), the cosine distance,
 # and brute-force calculation of distances.
     knn_tfidf = KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='cosine')
     knn_tfidf.fit(X_train_tfidf, y_train)
-
-    p = []
+    p1 = []
+    p2 = []
 # Classify the test vectors.
-    p.extend(knn_tfidf.predict(X_test_tfidf))
-    print "answers tfidf"
-    float(p[0])
-    print p[0]
+    p1.extend(knn_tfidf.predict(X_test_tfidf))
+    #print "answers tfidf"
+    #float(p[0])
+    #print "answers tfidf", p[0]
 
 
-    print("\nClassifying LSA vectors...")
+    #print("\nClassifying LSA vectors...")
 
 # Build a k-NN classifier. Use k = 5 (majority wins), the cosine distance,
 # and brute-force calculation of distances.
@@ -118,13 +111,13 @@ def main(stud_ans):
     knn_lsa.fit(X_train_lsa, y_train)
 
 # Classify the test vectors.
-    p.extend(knn_lsa.predict(X_test_lsa))
-    print "answers lsa"
-    float(p[1])
-    print p[1]
+    p2.extend(knn_lsa.predict(X_test_lsa))
+    #print "answers lsa"
+    #float(p[1])
+    #print "answers lsa", p[1]
 
-    return p
+    return (p1, p2)
 
 if __name__ == "__main__":
     stud_ans = raw_input("Enter answer: ")
-    main(stud_ans)
+    main([stud_ans])

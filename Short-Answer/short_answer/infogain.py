@@ -4,7 +4,9 @@
 from sklearn.feature_selection import mutual_info_classif
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_selection import SelectKBest
+from scipy.sparse import lil_matrix
 import numpy as np
+import read_data as rd
 import csv, os, scipy
 import operator
 from sklearn.neighbors import KNeighborsClassifier
@@ -51,42 +53,45 @@ def delete_row_csr(mat, i):
     mat.indptr = mat.indptr[:-1]
     mat._shape = (mat._shape[0]-1, mat._shape[1])
 
+
+
+
 def main(stud_ans):
-    BASE = os.path.dirname(os.path.abspath(__file__))
+    n = len(stud_ans)
     target = []
     data = []
-    data.append(stud_ans)
-    target.extend("0")
-    with open(os.path.join(BASE, "train.tsv")) as tsvfile:
-        tsvreader = csv.reader(tsvfile, delimiter="\t")
-        for line in tsvreader:
-            if line[1] != "5":
-                break
-            data.append(str(line[4]))
-            target.extend(line[2])
-
-    cv = CountVectorizer(max_df=1.0, min_df=2,
+    data.extend(stud_ans)
+    for i in range(0,n):
+        target.extend("0")
+    op = rd.read_data("train.tsv")
+    data.extend(op[0])
+    target.extend(op[1])
+    cv = CountVectorizer(max_df=1.0, min_df=2,ngram_range=(1, 2),
                                      max_features=10000,
                                      stop_words='english')
     X_vec = cv.fit_transform(data)
     #print X_vec.shape
     #mutual_info_classif(X_vec, target, discrete_features=True)
-    X_new = SelectKBestCustom(mutual_info_classif, k=100).fit_transform(X_vec, target)
+    X_new = SelectKBestCustom(mutual_info_classif, k=500).fit_transform(X_vec, target)
     #print X_new.shape
-    X_test = X_new[0]
-    delete_row_csr(X_new, 0)
-    del target[0]
+    q = X_new.shape[1]
+    #X_test = [[0 for x in range(m)] for y in range(n)]
+    X_test = lil_matrix((n,q)) 
+    for i in range(0,n):
+        X_test[i] = X_new[i]
+    for i in range(0,n):
+        delete_row_csr(X_new, i)
+        del target[i]
     knn = KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='cosine')
     knn.fit(X_new, target)
-
-    p = []
+    #print X_test
     # Classify the test vectors.
-    p.extend(knn.predict(X_test))
-    float(p[0])
-    print "infogain", p[0]
-    return p[0]
+    p = knn.predict(X_test)
+    #float(p[0])
+    #print "infogain", p[0]
+    return p
 
    
 if __name__ == "__main__":
     stud_ans = raw_input("Enter answer: ")
-    main(stud_ans)
+    main([stud_ans])

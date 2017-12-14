@@ -3,7 +3,8 @@ import keyword_score as key
 import lsa_score as lsa
 import infogain as ig
 import csv, os, sys
-import numpy
+import time
+
 
 def blockPrint():
     sys.stdout = open(os.devnull, 'w')
@@ -13,33 +14,34 @@ def enablePrint():
 
 
 def main(stud_ans):
-    c, r = 5, len(stud_ans)
-    result = [[0 for x in range(c)] for y in range(r)]
-    i = 0 
+    key_res = []
+    cd_res = []
+    tfidf_res = []
+    lsa_res = []
+    i = 0
+    ig_res = ig.main(stud_ans)
     for ans in stud_ans:
-        result[i][0] = key.main(ans)
-        result[i][1] = cd.main(ans)
-        lsaresult = lsa.main(ans)
-        result[i][2] = lsaresult[0]
-        result[i][3] = lsaresult[1]
-        result[i][4] = ig.main(ans)
+        key_res.extend(str(key.main(ans)))
+        cd_res.extend(str(cd.main(ans)))
         i = i + 1
-    return result
+    res = lsa.main(stud_ans)
+    tfidf_res = res[0]
+    lsa_res = res[1]
+    return {"key":key_res, "cd":cd_res, "tfidf":tfidf_res, "lsa": lsa_res, "ig":ig_res}
 
 def test_accuracy(result, scores):
-    print "accuracy"
-    acc = [0.0, 0.0, 0.0, 0.0, 0.0]
-    n = len(result)
+    acc = {"key": 0.0, "cd": 0.0, "tfidf": 0.0, "lsa": 0.0, "ig":0.0}
+    n = len(scores)
     for i in range(0, n):
-        for j in range(0,5):
-            if(scores[i] == result[i][j]):
-                acc[j] = acc[j] + 1
-                #print "+1"
-    for j in range (0, 5):
-        acc[j] = (acc[j]/n)*100
+        for key in result:
+            if(scores[i] == result[key][i]):
+                acc[key] = acc[key] + 1
+    for key in acc:
+        acc[key] = (acc[key]/n)*100
     return acc
 
 if __name__ == "__main__":
+    start = time.time()
     testdata = []
     scores = []
     with open("test.tsv") as tsvfile:
@@ -47,14 +49,12 @@ if __name__ == "__main__":
         for line in tsvreader:
             testdata.append(str(line[4]))
             scores.extend(line[2])
-    #blockPrint()
+    blockPrint()
     result = main(testdata)
-    #enablePrint()
-    #a = numpy.asarray(result)
-    #numpy.savetxt("foo.csv", a, delimiter=",")
-    for i in range(0, len(result)):
-        print result[i][2], result[i][3], result[i][4]
+    enablePrint()
     acc = test_accuracy(result, scores)
     print "accuracy"
-    for num in acc:
-        print num
+    for key in acc:
+        print key, acc[key] 
+    end = time.time()
+    print end - start

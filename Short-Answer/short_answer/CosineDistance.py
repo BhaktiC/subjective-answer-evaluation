@@ -64,7 +64,7 @@ def synonym_merge(vector1, vector2):
         for sy in synonyms:
             stemmedsy = ps.stem(sy)
             if stemmedsy in vector2:
-                print "%s is being replaced by %s" % (stemmedsy, stemmedkey)
+                #print "%s is being replaced by %s" % (stemmedsy, stemmedkey)
                 count = vector2[stemmedsy]
                 vector2cp.update({stemmedkey:count})
                 del vector2cp[stemmedsy]
@@ -111,13 +111,13 @@ def main(stud_ans):
     stud_vector = synonym_merge(model_vector, stud_vector)
     model_vector = stem_vector(model_vector) 
     result = get_cosine_dist(model_vector, stud_vector)
-    print "TF vector of model answer"
-    print model_vector
-    print "TF vector of student answer"
-    print stud_vector
-    print "Result using Cosine Distance"
+    #print "TF vector of model answer"
+    #print model_vector
+    #print "TF vector of student answer"
+    #print stud_vector
+    #print "Result using Cosine Distance"
     result = round(result*3,0)
-    print result
+    #print "cosine", result
     return result
 
 if __name__ == "__main__":
