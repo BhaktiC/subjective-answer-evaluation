@@ -52,7 +52,7 @@ def main(stud_ans):
 #   - Selects the 10,000 most frequently occuring words in the corpus.
 #   - Normalizes the vector (L2 norm of 1.0) to normalize the effect of
 #     document length on the tf-idf values.
-    vectorizer = TfidfVectorizer(max_df=1.0, max_features=10000,
+    vectorizer = TfidfVectorizer(max_df=0.5, max_features=10000,
                              min_df=2, stop_words='english', ngram_range=(1, 2),
                              use_idf=True)
 

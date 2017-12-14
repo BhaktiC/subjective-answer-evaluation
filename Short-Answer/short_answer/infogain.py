@@ -66,7 +66,7 @@ def main(stud_ans):
     op = rd.read_data("train.tsv")
     data.extend(op[0])
     target.extend(op[1])
-    cv = CountVectorizer(max_df=1.0, min_df=2,ngram_range=(1, 2),
+    cv = CountVectorizer(max_df=0.5, min_df=2,ngram_range=(1, 2),
                                      max_features=10000,
                                      stop_words='english')
     X_vec = cv.fit_transform(data)

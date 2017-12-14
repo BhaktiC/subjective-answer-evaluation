@@ -44,7 +44,7 @@ if __name__ == "__main__":
     start = time.time()
     testdata = []
     scores = []
-    with open("test.tsv") as tsvfile:
+    with open("train.tsv") as tsvfile:
         tsvreader = csv.reader(tsvfile, delimiter="\t")
         for line in tsvreader:
             testdata.append(str(line[4]))
