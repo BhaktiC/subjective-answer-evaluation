@@ -102,14 +102,10 @@ def main(stud_ans):
     #stemmed_sentence = autocorrect_and_stem(filtered_sentence)
     stemmed_sentence = filtered_sentence
     model_vector = generate_vector(stemmed_sentence)
-
-
-
     stud_ans = remove_punctuation(stud_ans)
     word_tokens = word_tokenize(stud_ans)
     filtered_sentence = remove_stopwords(word_tokens)
     stemmed_sentence = autocorrect_and_stem(filtered_sentence)
-    #stemmed_sentence = filtered_sentence
     stud_vector = generate_vector(stemmed_sentence)
     stud_vector = synonym_merge(model_vector, stud_vector)
     model_vector = stem_vector(model_vector)
