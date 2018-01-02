@@ -10,12 +10,13 @@
 <meta charset="utf-8">
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Minifolio - Bootstrap Responsive Resume, Personal Portfolio Template</title>
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/jquery.fancybox.css">
-<link rel="stylesheet" href="css/main.css">
-<link rel="stylesheet" href="css/responsive.css">
-<link rel="stylesheet" href="css/animate.min.css">
+<title>Subjective Answer Evaluation - About Us</title>
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'short_answer/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'short_answer/css/jquery.fancybox.css' %}">
+<link rel="stylesheet" href="{% static 'short_answer/css/main.css' %}">
+<link rel="stylesheet" href="{% static 'short_answer/css/responsive.css' %}">
+<link rel="stylesheet" href="{% static 'short_answer/css/animate.min.css' %}">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 </head>
 
@@ -28,9 +29,9 @@
       <span class="logo" id="timer"></span>
       <nav class="navigation" role="navigation">
         <ul class="primary-nav">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="#">Logout</a></li>
+          <li><a href="/short_answer/{{home}}">Home</a></li>
+          <li><a href="/short_answer/about/">About Us</a></li>
+          <li><a href="{%url 'logout'%}">Logout</a></li>
         </ul>
       </nav>
       <a href="#" class="nav-toggle">Menu<span></span></a> </div>
@@ -41,7 +42,7 @@
   <div class="container">
     <div class="col-md-10 col-md-offset-1">
       <div class="innerbanner-text text-center">
-        <p>About me</p>
+        <p>About Us</p>
         <!-- banner text -->
       </div>
     </div>
@@ -52,8 +53,8 @@
 <section id="inner-description" class="section inner-description">
   <div class="container">
     <div class="col-md-10 col-md-offset-1 text-center"> <img src="images/designer-pic.jpg" alt="Mafolio">
-      <h1>Johnathan Doe</h1>
-      <p>UX Designer/ Developer</p>
+      <h1>Subjective Answer Evaluation</h1>
+      <p>Final Year Project- KJSCE - IT Dept. 2018</p>
     </div>
     <div class="col-md-10 col-md-offset-1 space">
       <p>Donec sed odio dui. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur. Cras mattis consectetur purus sit amet avida at eget metus.Donec sed odio dui. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur. Cras mattis consectetur purus sit amet avida at eget metus.</p>
@@ -64,16 +65,6 @@
 </section>
 <!-- description text section -->
 
-<!-- hire me section -->
-<section id="hireme" class="section hireme">
-  <div class="container">
-    <div class="col-md-8 col-md-offset-2 text-center">
-      <h3>Need something specific?</h3>
-      <p>We are currently crafting new products but would love to hear from you.</p>
-      <a href="https://github.com/kamalcha/ActiveBox/archive/master.zip" class="btn btn-large">Hire me</a> </div>
-  </div>
-</section>
-<!-- hire me section -->
 <!-- footer -->
 
 <footer class="section footer">
@@ -100,11 +91,11 @@
 
 <!-- JS FILES -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery.fancybox.pack.js"></script>
-<script src="js/jquery.waypoints.min.js"></script>
-<script src="js/retina.min.js"></script>
-<script src="js/modernizr.js"></script>
-<script src="js/main.js"></script>
+<script src="{% static 'short_answer/js/bootstrap.min.js'%}"></script>
+<script src="{% static 'short_answer/js/jquery.fancybox.pack.js'%}"></script>
+<script src="{% static 'short_answer/js/jquery.waypoints.min.js'%}"></script>
+<script src="{% static 'short_answer/js/retina.min.js'%}"></script>
+<script src="{% static 'short_answer/js/modernizr.js'%}"></script>
+<script src="{% static 'short_answer/js/main.js'%}"></script>
 </body>
 </html>

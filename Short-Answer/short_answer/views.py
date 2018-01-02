@@ -22,7 +22,8 @@ def index(request):
     print request.session.keys()
     return render(request, 'short_answer/index.html')
 
-def question(request):
+def question_bank(request):
+
     if not request.user.is_authenticated():
         return render(request, 'short_answer/index.html')
     if request.method == 'POST':
@@ -35,18 +36,14 @@ def question(request):
                     testCode = uuid.uuid4().hex[:6].upper()
                     teacher_instance = User.objects.get(id = request.session['pkey'])
                     test_instance = Test.objects.create(test_code = testCode, question_nos = selected_ques, created_by = teacher_instance)
-                    return HttpResponseRedirect('/short_answer/thome/')
+                    return HttpResponseRedirect('/short_answer/teacher_home/')
                 except IntegrityError as e:
                     continue
                 break
-
-
-
-    all_questions = QuestionBank.objects.all()
-    context = {'all_questions' : all_questions}
-    print "NO"
-    return render(request, 'short_answer/question.html', context)
-
+    else:
+        all_questions = QuestionBank.objects.all()
+        context = {'all_questions' : all_questions}
+        return render(request, 'short_answer/QuestionBank.html', context)
 
 
 def register(request):
@@ -112,7 +109,7 @@ def user_login(request):
                       login(request, user)
                       request.session['s_email'] = user.email
                       request.session['test_code'] = test_code
-                      return HttpResponseRedirect('/short_answer/shome/')
+                      return HttpResponseRedirect('/short_answer/student_home/')
                   except ObjectDoesNotExist as e:
                       return HttpResponse("INVALID TEST CODE!")
 
@@ -126,7 +123,7 @@ def user_login(request):
                   request.session['t_email'] = user.email
                   request.session['pkey'] = user.id
                   login(request, user)
-                  return HttpResponseRedirect('/short_answer/thome/')
+                  return HttpResponseRedirect('/short_answer/teacher_home/')
 
 
           else:
@@ -137,18 +134,30 @@ def user_login(request):
         # the login is a  GET request, so just show the user the login form.
         return render_to_response('short_answer/index.html', {}, context)
 
-def shome(request):
+def student_home(request):
             if request.user.is_authenticated():
-                return render(request, 'short_answer/home.html')
+                return render(request, 'short_answer/student_home.html')
             else:
                 return render(request, 'short_answer/index.html')
 
-def thome(request):
-            if request.user.is_authenticated():
-                return render(request, 'short_answer/CreateTest.html')
+def about(request):
+            if not request.user.is_authenticated():
+                context = {'home' : ''}
             else:
-                return render(request, 'short_answer/index.html')
-def test(request):
+                if 't_email' in request.session:
+                    context = {'home' : 'teacher_home'}
+                else:
+                    context = {'home' : 'student_home'}
+
+            return render(request, 'short_answer/about.html', context)
+
+
+def teacher_home(request):
+            if request.user.is_authenticated():
+                return render(request, 'short_answer/teacher_home.html')
+            else:
+                return HttpResponseRedirect('/short_answer/')
+def student_test(request):
             if not request.user.is_authenticated():
                 return render(request, 'short_answer/index.html')
             test_code = request.session['test_code']
@@ -161,11 +170,7 @@ def test(request):
             print "Question list is :"
             print question_list
             context = {'question_list' : question_list}
-            return render(request, 'short_answer/sample_test.html', context)
-
-
-def addqs(request):
-            return render(request, 'short_answer/addqs.html')
+            return render(request, 'short_answer/student_test.html', context)
 
 def viewscore(request):
             stud_ans = request.POST.get('ans1')

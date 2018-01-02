@@ -48,11 +48,10 @@
     <!-- navigation section  -->
     <div class="header-content clearfix">
       <nav class="navigation" role="navigation">
-        <ul class="primary-nav">
-          <li><a href="{%url 'teacher_home' %}">Home</a></li>
-          <li><a href="about.html">About Us</a></li>
-		  <li><a href="CreateTest.html">Test Option</a></li>
-          <li><a href="/short_answer/logout">Logout</a></li>
+				<ul class="primary-nav">
+					<li><a href="{%url 'teacher_home' %}">Home</a></li>
+          <li><a href="/short_answer/about/">About Us</a></li>
+          <li><a href="{%url 'logout' %}">Logout</a></li>
         </ul>
       </nav>
       <a href="#" class="nav-toggle">Menu<span></span></a> </div>
@@ -72,7 +71,7 @@
 <!-- description text section -->
 <section id="inner-description" class="section inner-description">
 
-        <form method="post" action="/short_answer/question/" name="cform" id="cform">
+        <form method="post" action="{%url 'question_bank' %}" name="cform" id="cform">
 					{% csrf_token %}
 
 	<div class="left">
