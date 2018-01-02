@@ -10,7 +10,7 @@ class UserProfile(models.Model):
         # )
 
         # This field is required.
-        user = models.OneToOneField(User)
+        user = models.OneToOneField(User, on_delete=models.CASCADE)
         # These fields are optional
         isStudent = models.BooleanField()
         def __unicode__(self):
