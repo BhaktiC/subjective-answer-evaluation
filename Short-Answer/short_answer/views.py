@@ -8,14 +8,45 @@ from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from short_answer.forms import UserForm, UserProfileForm
 from django.contrib.auth import logout
-from short_answer.models import UserProfile
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+from short_answer.models import *
+
 import driver
 import knn
 import CosineDistance
+import uuid
 
 
 def index(request):
+    print request.session.keys()
     return render(request, 'short_answer/index.html')
+
+def question(request):
+    if not request.user.is_authenticated():
+        return render(request, 'short_answer/index.html')
+    if request.method == 'POST':
+        for i in range(0,100):
+            while True:
+                try:
+                    selected_ques_list = request.POST.getlist('checkbox')
+                    selected_ques = ','.join(selected_ques_list)
+                    print selected_ques
+                    testCode = uuid.uuid4().hex[:6].upper()
+                    teacher_instance = User.objects.get(id = request.session['pkey'])
+                    test_instance = Test.objects.create(test_code = testCode, question_nos = selected_ques, created_by = teacher_instance)
+                    return HttpResponseRedirect('/short_answer/thome/')
+                except IntegrityError as e:
+                    continue
+                break
+
+
+
+    all_questions = QuestionBank.objects.all()
+    context = {'all_questions' : all_questions}
+    print "NO"
+    return render(request, 'short_answer/question.html', context)
+
 
 
 def register(request):
@@ -56,6 +87,7 @@ def user_login(request):
     if request.method == 'POST':
           username = request.POST['username']
           password = request.POST['password']
+          test_code = request.POST['tCode']
           role = request.POST.get('isStudent')
 
           if role == "Teacher":
@@ -69,20 +101,30 @@ def user_login(request):
 
           user = authenticate(username=username, password=password)
 
-
           if user is not None:
               user2 = UserProfile.objects.get(user=user)
-              # Student Account
-
+              #Student account
               if user2.isStudent and isStudent and user.is_active:
-                  login(request, user)
-                  return HttpResponseRedirect('/short_answer/shome/')
+                  try:
+
+                      test_code = request.POST['tCode']
+                      test_instance = Test.objects.get(test_code = test_code)
+                      login(request, user)
+                      request.session['s_email'] = user.email
+                      request.session['test_code'] = test_code
+                      return HttpResponseRedirect('/short_answer/shome/')
+                  except ObjectDoesNotExist as e:
+                      return HttpResponse("INVALID TEST CODE!")
+
               elif user2.isStudent == False and isStudent:
                   return HttpResponse("INVALID LOGIN ATTEMPT!")
               elif user2.isStudent == True and isStudent == False:
                       return HttpResponse("INVALID LOGIN ATTEMPT!")
 
+              # Teacher Account
               elif user2.isStudent == False and isStudent == False and user.is_active:
+                  request.session['t_email'] = user.email
+                  request.session['pkey'] = user.id
                   login(request, user)
                   return HttpResponseRedirect('/short_answer/thome/')
 
@@ -96,13 +138,32 @@ def user_login(request):
         return render_to_response('short_answer/index.html', {}, context)
 
 def shome(request):
-            return render(request, 'short_answer/home.html')
+            if request.user.is_authenticated():
+                return render(request, 'short_answer/home.html')
+            else:
+                return render(request, 'short_answer/index.html')
+
 def thome(request):
-            return render(request, 'short_answer/CreateTest.html')
+            if request.user.is_authenticated():
+                return render(request, 'short_answer/CreateTest.html')
+            else:
+                return render(request, 'short_answer/index.html')
 def test(request):
-            return render(request, 'short_answer/sample_test.html')
-def question(request):
-            return render(request, 'short_answer/question.html')
+            if not request.user.is_authenticated():
+                return render(request, 'short_answer/index.html')
+            test_code = request.session['test_code']
+            test_instance = Test.objects.get(test_code = test_code)
+            ques_nos_string = test_instance.question_nos
+            ques_nos_list = ques_nos_string.split(",")
+            question_list = []
+            for i in range (len(ques_nos_list)):
+                question_list.append(QuestionBank.objects.get(id = ques_nos_list[i]))
+            print "Question list is :"
+            print question_list
+            context = {'question_list' : question_list}
+            return render(request, 'short_answer/sample_test.html', context)
+
+
 def addqs(request):
             return render(request, 'short_answer/addqs.html')
 

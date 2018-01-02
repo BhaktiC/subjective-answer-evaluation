@@ -46,6 +46,15 @@ body {
 }
 .login h1 { color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; text-align:center; }
 
+
+#tCode.input1{
+
+display: none;
+
+}
+
+
+
 .input1 {
 	width: 100%;
 	margin-bottom: 10px;
@@ -98,6 +107,25 @@ margin-top:20px;
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
 
+  <script type="text/javascript">
+
+
+  function show1(){
+
+    document.getElementById('tCode').style.display = 'none';
+
+  }
+
+
+  function show2(){
+
+    document.getElementById('tCode').style.display = 'block';
+
+  }
+
+  </script>
+
+
 </head>
 
 <body>
@@ -109,32 +137,19 @@ margin-top:20px;
         <input class="input1" id="password" type="password" value="" name="password" placeholder="Password" required="required" />
 		<br>
 
-			<input class="radio" type="radio" id="isStudent" name="isStudent" value="Teacher">     <font color="white">Teacher</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;	<input class="radio" id="isStudent" type="radio" name="isStudent" value="Student">     <font color="white">Student</font>
+			<input class="radio" type="radio" id="isStudent" name="isStudent" value="Teacher" onclick="show1()">     <font color="white">Teacher</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;	<input class="radio" id="isStudent" type="radio" name="isStudent" value="Student" onclick="show2()">     <font color="white">Student</font>
 		<br><br>
-        <button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button><br>
+    <input class="input1" id="tCode" type="text" name="tCode" value=""  placeholder="Test code"/>
+    <br>
+
+        <button type="submit" class="btn btn-primary btn-block btn-large">Login.</button><br>
 
 		</form>
-		<script  src="js/index.js"></script>
-	<script language="javascript">
-		function check(form)/*function to check userid & password*/
-		{
-		 /*the following code checkes whether the entered userid and password are matching*/
-		 if(form.u.value == "admin" && form.p.value == "admin123")
-		  {
-			window.open('CreateTest.html')/*opens the target page while Id & password matches*/
-		  }
-		 else
-		 {
-		   window.open('home.html')/*displays error message*/
-		  }
-		}
-	</script>
+
 
 </div>
-          <!-- <div>
-            <a href="index.html"><button type="submit" class="btn btn-primary btn-block btn-large size">Let me go back to homepage.</button></a>
-          </div> -->
+
 
 
 </body>
