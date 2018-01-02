@@ -30,46 +30,14 @@
 <meta charset="utf-8">
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Minifolio - Bootstrap Responsive Resume, Personal Portfolio Template</title>
-<link rel="stylesheet" href="../../static/css/bootstrap.min.css">
-<link rel="stylesheet" href="../../static/css/jquery.fancybox.css">
-<link rel="stylesheet" href="../../static/css/main.css">
-<link rel="stylesheet" href="../../static/css/responsive.css">
-<link rel="stylesheet" href="../../static/css/animate.min.css">
+<title>Create Test from Question Bank</title>
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'short_answer/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'short_answer/css/jquery.fancybox.css' %}">
+<link rel="stylesheet" href="{% static 'short_answer/css/main.css' %}">
+<link rel="stylesheet" href="{% static 'short_answer/css/responsive.css' %}">
+<link rel="stylesheet" href="{% static 'short_answer/css/animate.min.css' %}">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-
-<script>
-// Set the date we're counting down to
-// Edited by Aakash -
-// Down date set to 10:30 (tonight) for now, Will take a variable later.
-var countDownDate = new Date("Oct 12, 2017 15:30:25").getTime();
-
-// Update the count down every 1 second
-var x = setInterval(function() {
-
-    // Get todays date and time
-    var now = new Date().getTime();
-
-    // Find the distance between now an the count down date
-    var distance = countDownDate - now;
-
-    // Time calculations for days, hours, minutes and seconds
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    // Output the result in an element with id="demo"
-    document.getElementById("timer").innerHTML = hours + "h "
-    + minutes + "m " + seconds + "s ";
-
-    // If the count down is over, write some text
-    if (distance < 0) {
-        clearInterval(x);
-        document.getElementById("demo").innerHTML = "EXPIRED";
-    }
-}, 1000);
-</script>
-
 
 </head>
 
@@ -81,7 +49,7 @@ var x = setInterval(function() {
     <div class="header-content clearfix">
       <nav class="navigation" role="navigation">
         <ul class="primary-nav">
-          <li><a href="index.html">Home</a></li>
+          <li><a href="{%url 'teacher_home' %}">Home</a></li>
           <li><a href="about.html">About Us</a></li>
 		  <li><a href="CreateTest.html">Test Option</a></li>
           <li><a href="/short_answer/logout">Logout</a></li>
@@ -104,25 +72,29 @@ var x = setInterval(function() {
 <!-- description text section -->
 <section id="inner-description" class="section inner-description">
 
-        <form method="post" action="php/contact.php" name="cform" id="cform">
+        <form method="post" action="/short_answer/question/" name="cform" id="cform">
+					{% csrf_token %}
+
 	<div class="left">
 		<h2>Create Test from Question Bank</h2><br>
-		<h3><input type="checkbox" name="checkbox">&nbsp;&nbsp;&nbsp;&nbsp;What is a process and process table? </h3>
-		<h3><input type="checkbox" name="checkbox">&nbsp;&nbsp;&nbsp;&nbsp; What are the differences between process and thread? </h3>
-		<h3><input type="checkbox" name="checkbox">&nbsp;&nbsp;&nbsp;&nbsp; What are the necessary conditions for deadlock? </h3>
-		<h3><input type="checkbox" name="checkbox">&nbsp;&nbsp;&nbsp;&nbsp; Differences between mutex and semphore? </h3>
-		<h3><input type="checkbox" name="checkbox">&nbsp;&nbsp;&nbsp;&nbsp; What are different states of process. </h3>
-		<h3><input type="checkbox" name="checkbox">&nbsp;&nbsp;&nbsp;&nbsp; Define Operating System. List the objectives of an operating system. </h3>
-		<h3><input type="checkbox" name="checkbox">&nbsp;&nbsp;&nbsp;&nbsp; Distinguish between Logical and Physical address space. </h3>
-		<h3><input type="checkbox" name="checkbox">&nbsp;&nbsp;&nbsp;&nbsp; Explain and compare the SCAN and C-SCAN disk scheduling algorithms. </h3>
-		<h3><input type="checkbox" name="checkbox">&nbsp;&nbsp;&nbsp;&nbsp; Explain the Resource-Allocation-Graph algorithm for deadlock avoidance. </h3>
-		<h3><input type="checkbox" name="checkbox">&nbsp;&nbsp;&nbsp;&nbsp; What is a process? Explain about various fields of Process Control Block. </h3>
-		<h3><input type="checkbox" name="checkbox">&nbsp;&nbsp;&nbsp;&nbsp; Explain how multiprogramming increases the utilization of CPU. </h3>
-		<h3><input type="checkbox" name="checkbox">&nbsp;&nbsp;&nbsp;&nbsp; Mention the objectives and functions of Real-Time Embedded systems. </h3>
-
+		{% if all_questions %}
+    <ul>
+    {% for question in all_questions %}
+		<h3><input type="checkbox" id="{{question.id}}" value="{{question.id}}" name="checkbox">&nbsp;&nbsp;&nbsp;&nbsp;
+			{{ question.question_text }}
+		</h3>
+        <!-- <li>{{ question.question_text }}</li> -->
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No questions are available.</p>
+{% endif %}
 		<br><br><br>
-		  <input class="button" type="submit" id="submit" name="Submit" class="submitBnt" value="  Create Test   ">
+
+		  <input class="button submitBnt" type="submit" id="submit" name="Submit"
+			value="Create Test">
           <div id="simple-msg"></div>
+
         </form>
 
 </div>
@@ -153,12 +125,11 @@ var x = setInterval(function() {
 
 <!-- JS FILES -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery.fancybox.pack.js"></script>
-<script src="js/jquery.waypoints.min.js"></script>
-<script src="js/retina.min.js"></script>
-<script src="js/modernizr.js"></script>
-<script src="js/jquery.contact.js"></script>
-<script src="js/main.js"></script>
+<script src="{% static 'short_answer/js/bootstrap.min.js'%}"></script>
+<script src="{% static 'short_answer/js/jquery.fancybox.pack.js'%}"></script>
+<script src="{% static 'short_answer/js/jquery.waypoints.min.js'%}"></script>
+<script src="{% static 'short_answer/js/retina.min.js'%}"></script>
+<script src="{% static 'short_answer/js/modernizr.js'%}"></script>
+<script src="{% static 'short_answer/js/main.js'%}"></script>
 </body>
 </html>
