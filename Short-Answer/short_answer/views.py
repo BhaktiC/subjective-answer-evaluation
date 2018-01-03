@@ -19,31 +19,36 @@ import uuid
 
 
 def index(request):
-    print request.session.keys()
     return render(request, 'short_answer/index.html')
 
 def question_bank(request):
 
     if not request.user.is_authenticated():
         return render(request, 'short_answer/index.html')
-    if request.method == 'POST':
-        for i in range(0,100):
-            while True:
-                try:
-                    selected_ques_list = request.POST.getlist('checkbox')
-                    selected_ques = ','.join(selected_ques_list)
-                    print selected_ques
-                    testCode = uuid.uuid4().hex[:6].upper()
-                    teacher_instance = User.objects.get(id = request.session['pkey'])
-                    test_instance = Test.objects.create(test_code = testCode, question_nos = selected_ques, created_by = teacher_instance)
-                    return HttpResponseRedirect('/short_answer/teacher_home/')
-                except IntegrityError as e:
-                    continue
-                break
+
     else:
-        all_questions = QuestionBank.objects.all()
-        context = {'all_questions' : all_questions}
-        return render(request, 'short_answer/QuestionBank.html', context)
+        if request.session['isStudent'] == True:
+            logout(request)
+            return HttpResponseRedirect('/short_answer/')
+        else:
+            if request.method == 'POST':
+                for i in range(0,100):
+                    while True:
+                        try:
+                            selected_ques_list = request.POST.getlist('checkbox')
+                            selected_ques = ','.join(selected_ques_list)
+                            print selected_ques
+                            testCode = uuid.uuid4().hex[:6].upper()
+                            teacher_instance = User.objects.get(id = request.session['pkey'])
+                            test_instance = Test.objects.create(test_code = testCode, question_nos = selected_ques, created_by = teacher_instance)
+                            return HttpResponseRedirect('/short_answer/teacher_home/')
+                        except IntegrityError as e:
+                            continue
+                        break
+            else:
+                all_questions = QuestionBank.objects.all()
+                context = {'all_questions' : all_questions}
+                return render(request, 'short_answer/QuestionBank.html', context)
 
 
 def register(request):
@@ -108,6 +113,7 @@ def user_login(request):
                       test_instance = Test.objects.get(test_code = test_code)
                       login(request, user)
                       request.session['s_email'] = user.email
+                      request.session['isStudent'] = user2.isStudent
                       request.session['pkey'] = user.id
                       request.session['test_code'] = test_code
                       return HttpResponseRedirect('/short_answer/student_home/')
@@ -122,6 +128,7 @@ def user_login(request):
               # Teacher Account
               elif user2.isStudent == False and isStudent == False and user.is_active:
                   request.session['t_email'] = user.email
+                  request.session['isStudent'] = user2.isStudent
                   request.session['pkey'] = user.id
                   login(request, user)
                   return HttpResponseRedirect('/short_answer/teacher_home/')
@@ -136,30 +143,45 @@ def user_login(request):
         return render_to_response('short_answer/index.html', {}, context)
 
 def student_home(request):
-    if request.user.is_authenticated():
-        return render(request, 'short_answer/student_home.html')
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/short_answer/')
     else:
-        return render(request, 'short_answer/index.html')
+        if request.session['isStudent'] == False:
+            return HttpResponseRedirect('/short_answer/teacher_home')
+
+        else:
+            return render(request, 'short_answer/student_home.html')
 
 def test_history(request):
-
-    teacher_instance = User.objects.get(id = request.session['pkey'])
-    tests = Test.objects.filter(created_by = teacher_instance)
-    tests = list(tests)
-    context = {'tests' : tests}
-    return render(request, 'short_answer/test_history.html', context)
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/short_answer/')
+    else:
+        if request.session['isStudent'] == True:
+            logout(request)
+            return HttpResponseRedirect('/short_answer/')
+        else:
+            teacher_instance = User.objects.get(id = request.session['pkey'])
+            tests = Test.objects.filter(created_by = teacher_instance)
+            tests = list(tests)
+            context = {'tests' : tests}
+            return render(request, 'short_answer/test_history.html', context)
 
 def test_detail(request, test_id):
-    test_instance = Test.objects.get(id = test_id)
-    ques_nos_string = test_instance.question_nos
-    ques_nos_list = ques_nos_string.split(",")
-    question_list = []
-    for i in range (len(ques_nos_list)):
-        question_list.append(QuestionBank.objects.get(id = ques_nos_list[i]))
-    print "Question list is :"
-    print question_list
-    context = {'question_list' : question_list}
-    return render(request, 'short_answer/test_detail.html', context)
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/short_answer/')
+    else:
+        if request.session['isStudent'] == True:
+            logout(request)
+            return HttpResponseRedirect('/short_answer/')
+        else:
+            test_instance = Test.objects.get(id = test_id)
+            ques_nos_string = test_instance.question_nos
+            ques_nos_list = ques_nos_string.split(",")
+            question_list = []
+            for i in range (len(ques_nos_list)):
+                question_list.append(QuestionBank.objects.get(id = ques_nos_list[i]))
+            context = {'question_list' : question_list}
+            return render(request, 'short_answer/test_detail.html', context)
 
 def about(request):
     if not request.user.is_authenticated():
@@ -174,26 +196,33 @@ def about(request):
 
 
 def teacher_home(request):
-    if request.user.is_authenticated():
-        return render(request, 'short_answer/teacher_home.html')
-    else:
+    if not request.user.is_authenticated():
         return HttpResponseRedirect('/short_answer/')
+    else:
+        if request.session['isStudent'] == True:
+            logout(request)
+            return HttpResponseRedirect('/short_answer/')
+        else:
+            return render(request, 'short_answer/teacher_home.html')
 
 
 def student_test(request):
+
     if not request.user.is_authenticated():
         return render(request, 'short_answer/index.html')
-    test_code = request.session['test_code']
-    test_instance = Test.objects.get(test_code = test_code)
-    ques_nos_string = test_instance.question_nos
-    ques_nos_list = ques_nos_string.split(",")
-    question_list = []
-    for i in range (len(ques_nos_list)):
-        question_list.append(QuestionBank.objects.get(id = ques_nos_list[i]))
-    print "Question list is :"
-    print question_list
-    context = {'question_list' : question_list}
-    return render(request, 'short_answer/student_test.html', context)
+    else:
+        if request.session['isStudent'] == False:
+            return HttpResponseRedirect('/short_answer/teacher_home')
+        else:
+            test_code = request.session['test_code']
+            test_instance = Test.objects.get(test_code = test_code)
+            ques_nos_string = test_instance.question_nos
+            ques_nos_list = ques_nos_string.split(",")
+            question_list = []
+            for i in range (len(ques_nos_list)):
+                question_list.append(QuestionBank.objects.get(id = ques_nos_list[i]))
+            context = {'question_list' : question_list}
+            return render(request, 'short_answer/student_test.html', context)
 
 def viewscore(request):
     stud_ans = request.POST.get('ans1')
