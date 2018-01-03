@@ -1,0 +1,12 @@
+<body>
+{% if tests %}
+<ul>
+{% for test in tests %}
+<li><a href="/short_answer/test_history/{{test.id}}">{{test.date_created}}</a></li><br>
+<p> Test code : {{test.test_code}} </p>
+{% endfor %}
+</ul>
+{% else %}
+<p> no tests found </p>
+{% endif %}
+</body>
