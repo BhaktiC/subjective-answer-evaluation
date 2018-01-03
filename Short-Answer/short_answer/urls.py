@@ -9,6 +9,9 @@ urlpatterns = [
     url(r'^about/$', views.about, name='about'),
     url(r'^student_home/$', views.student_home, name='student_home'),
     url(r'^teacher_home/$', views.teacher_home, name='teacher_home'),
+    url(r'^test_history/$', views.test_history, name='test_history'),
+    url(r'^test_history/(?P<test_id>[0-9]+)/$', views.test_detail, name='test_detail'),
+
     url(r'^student_test/$', views.student_test, name='student_test'),
     url(r'^student_test/viewscore/$', views.viewscore, name='view_score'),
     url(r'^question_bank/$', views.question_bank, name='question_bank'),

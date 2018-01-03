@@ -108,6 +108,7 @@ def user_login(request):
                       test_instance = Test.objects.get(test_code = test_code)
                       login(request, user)
                       request.session['s_email'] = user.email
+                      request.session['pkey'] = user.id
                       request.session['test_code'] = test_code
                       return HttpResponseRedirect('/short_answer/student_home/')
                   except ObjectDoesNotExist as e:
@@ -135,51 +136,73 @@ def user_login(request):
         return render_to_response('short_answer/index.html', {}, context)
 
 def student_home(request):
-            if request.user.is_authenticated():
-                return render(request, 'short_answer/student_home.html')
-            else:
-                return render(request, 'short_answer/index.html')
+    if request.user.is_authenticated():
+        return render(request, 'short_answer/student_home.html')
+    else:
+        return render(request, 'short_answer/index.html')
+
+def test_history(request):
+
+    teacher_instance = User.objects.get(id = request.session['pkey'])
+    tests = Test.objects.filter(created_by = teacher_instance)
+    tests = list(tests)
+    context = {'tests' : tests}
+    return render(request, 'short_answer/test_history.html', context)
+
+def test_detail(request, test_id):
+    test_instance = Test.objects.get(id = test_id)
+    ques_nos_string = test_instance.question_nos
+    ques_nos_list = ques_nos_string.split(",")
+    question_list = []
+    for i in range (len(ques_nos_list)):
+        question_list.append(QuestionBank.objects.get(id = ques_nos_list[i]))
+    print "Question list is :"
+    print question_list
+    context = {'question_list' : question_list}
+    return render(request, 'short_answer/test_detail.html', context)
 
 def about(request):
-            if not request.user.is_authenticated():
-                context = {'home' : ''}
-            else:
-                if 't_email' in request.session:
-                    context = {'home' : 'teacher_home'}
-                else:
-                    context = {'home' : 'student_home'}
+    if not request.user.is_authenticated():
+        context = {'home' : ''}
+    else:
+        if 't_email' in request.session:
+            context = {'home' : 'teacher_home'}
+        else:
+            context = {'home' : 'student_home'}
 
-            return render(request, 'short_answer/about.html', context)
+    return render(request, 'short_answer/about.html', context)
 
 
 def teacher_home(request):
-            if request.user.is_authenticated():
-                return render(request, 'short_answer/teacher_home.html')
-            else:
-                return HttpResponseRedirect('/short_answer/')
+    if request.user.is_authenticated():
+        return render(request, 'short_answer/teacher_home.html')
+    else:
+        return HttpResponseRedirect('/short_answer/')
+
+
 def student_test(request):
-            if not request.user.is_authenticated():
-                return render(request, 'short_answer/index.html')
-            test_code = request.session['test_code']
-            test_instance = Test.objects.get(test_code = test_code)
-            ques_nos_string = test_instance.question_nos
-            ques_nos_list = ques_nos_string.split(",")
-            question_list = []
-            for i in range (len(ques_nos_list)):
-                question_list.append(QuestionBank.objects.get(id = ques_nos_list[i]))
-            print "Question list is :"
-            print question_list
-            context = {'question_list' : question_list}
-            return render(request, 'short_answer/student_test.html', context)
+    if not request.user.is_authenticated():
+        return render(request, 'short_answer/index.html')
+    test_code = request.session['test_code']
+    test_instance = Test.objects.get(test_code = test_code)
+    ques_nos_string = test_instance.question_nos
+    ques_nos_list = ques_nos_string.split(",")
+    question_list = []
+    for i in range (len(ques_nos_list)):
+        question_list.append(QuestionBank.objects.get(id = ques_nos_list[i]))
+    print "Question list is :"
+    print question_list
+    context = {'question_list' : question_list}
+    return render(request, 'short_answer/student_test.html', context)
 
 def viewscore(request):
-            stud_ans = request.POST.get('ans1')
-            template = loader.get_template('short_answer/viewscore.html')
-            scores = driver.main(stud_ans)
-            context = {
-        'scores': scores,
-    }
-            return HttpResponse(template.render(context, request))
+    stud_ans = request.POST.get('ans1')
+    template = loader.get_template('short_answer/viewscore.html')
+    scores = driver.main(stud_ans)
+    context = {
+'scores': scores,
+}
+    return HttpResponse(template.render(context, request))
 
 
 
