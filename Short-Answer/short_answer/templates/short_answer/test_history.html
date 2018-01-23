@@ -69,7 +69,7 @@ tr:nth-child(even) {
 <meta charset="utf-8">
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>View Score- Test</title>
+<title>Test History</title>
 {% load staticfiles %}
 <link rel="stylesheet" href="{% static 'short_answer/css/bootstrap.min.css' %}">
 <link rel="stylesheet" href="{% static 'short_answer/css/jquery.fancybox.css' %}">
@@ -90,8 +90,7 @@ tr:nth-child(even) {
       <!-- <span class="logo" id="timer"></span> -->
       <nav class="navigation" role="navigation">
         <ul class="primary-nav">
-          <li><a href="{%url 'student_home'%}">Home</a></li>
-          <li><a href="/short_answer/about/">About Us</a></li>
+          
           <li><a href="{%url 'logout'%}">Logout</a></li>
         </ul>
       </nav>
@@ -102,7 +101,7 @@ tr:nth-child(even) {
   <div class="container">
     <div class="col-md-10 col-md-offset-1" id="div1">
       <div class="innerbanner-text text-center">
-        <p><h2><font color="white">Score Generated</font></h2></p>
+        <p><h2><font color="white">Test History</font></h2></p>
         <!-- banner text -->
       </div>
     </div>
@@ -116,44 +115,31 @@ tr:nth-child(even) {
     <div class="row">
         <div class="panel panel-primary filterable">
             <div class="panel-heading">
-                <h3 class="panel-title" >Score Generated Using Different Techniques</h3>
+                <h3 class="panel-title" >Test History</h3>
 
             </div>
-            <table class="table">
+<!-- <body> -->
+{% if tests %}
+<table class="table">
                 <thead>
                     <tr class="filters">
-                        <th><input type="text" class="form-control" placeholder="Evaluation Technique" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Score" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Test Creation Time" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Test Code" disabled></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-
-                        <td>Keyword Matching</td>
-                        <td>{{ scores.0 }}</td>
-                    </tr>
-				  <tr>
-					<td>Cosine Similarity</td>
-					<td>{{ scores.1 }}</td>
-				  </tr>
-				  <tr>
-					<td>K Nearest Neighbours</td>
-					<td>{{ scores.2 }}</td>
-				  </tr>
-				  <tr>
-					<td>LSA(Latent Semantic Analysis)</td>
-					<td>{{ scores.3 }}</td>
-				  </tr>
-				  <tr>
-					<td>TF-IDF</td>
-					<td>{{ scores.4 }}</td>
-				  </tr>
-                </tbody>
+{% for test in tests %}
+<tr><td><a href="/short_answer/test_history/{{test.id}}">{{test.date_created}}</td>
+<td>  {{test.test_code}} </td></tr>
+{% endfor %}
+</tbody>
             </table>
         </div>
     </div>
 </div>
-
+{% else %}
+<p> no tests found </p>
+{% endif %}
 </section>
 <!-- description text section -->
 <!-- footer -->
@@ -189,3 +175,4 @@ tr:nth-child(even) {
 <script src="{% static 'short_answer/js/main.js'%}"></script>
 </body>
 </html>
+
