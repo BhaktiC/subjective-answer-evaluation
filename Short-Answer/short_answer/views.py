@@ -12,14 +12,20 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from short_answer.models import *
 
-import driver
+import driver2
 import knn
 import CosineDistance
 import uuid
 
 
 def index(request):
-    return render(request, 'short_answer/index.html')
+    if request.user.is_authenticated():
+        if request.session['isStudent']==True:
+            return HttpResponseRedirect('/short_answer/student_home')
+        else:
+            return HttpResponseRedirect('/short_answer/teacher_home')
+    else:
+        return render(request, 'short_answer/index.html')
 
 def question_bank(request):
 
@@ -138,6 +144,7 @@ def user_login(request):
               # Return an 'invalid login' error message.
               print  "invalid login details " + username + " " + password
               return render_to_response('short_answer/index.html', {}, context)
+
     else:
         # the login is a  GET request, so just show the user the login form.
         return render_to_response('short_answer/index.html', {}, context)
@@ -225,14 +232,25 @@ def student_test(request):
             return render(request, 'short_answer/student_test.html', context)
 
 def viewscore(request):
-    stud_ans = request.POST.get('ans1')
+    stud_ans = request.POST.getlist('ans')
+    test_code = request.session['test_code']
+    test_instance = Test.objects.get(test_code = test_code)
+    ques_nos_string = test_instance.question_nos
+    ques_nos_list = ques_nos_string.split(",")
+    final_score_list = []
+    for i in range (len(ques_nos_list)):
+        train_file = QuestionBank.objects.get(id = ques_nos_list[i]).train_file
+        student_answer = stud_ans[i]
+        scores_this_iteration = driver2.main(train_file, student_answer)
+        final_score_list.append(scores_this_iteration)
     template = loader.get_template('short_answer/viewscore.html')
-    scores = driver.main(stud_ans)
-    context = {
-'scores': scores,
-}
-    return HttpResponse(template.render(context, request))
-
+    print final_score_list
+    return HttpResponseRedirect('/short_answer/')
+#     scores = driver.main(stud_ans)
+#     context = {
+# 'scores': scores,
+# }
+#     return HttpResponse(template.render(context, request))
 
 
 @login_required

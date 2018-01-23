@@ -18,6 +18,7 @@ class UserProfile(models.Model):
 
 class QuestionBank(models.Model):
         question_text = models.CharField(max_length = 500)
+        train_file = models.CharField(max_length = 50)
         def __unicode__(self):
             return self.question_text
 

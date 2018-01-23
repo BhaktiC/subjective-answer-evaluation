@@ -81,14 +81,14 @@ def delete_row_csr(mat, i):
 
 
 
-def main(stud_ans):
+def main(stud_ans, train_file):
     n = len(stud_ans)
     target = []
     data = []
     data.extend(stud_ans)
     for i in range(0,n):
         target.extend("4")
-    op = rd.read_data("trainans1.tsv")
+    op = rd.read_data(train_file)
     data.extend(op[0])
     target.extend(op[1])
     cv = CountVectorizer(max_df=0.75, min_df=2,ngram_range=(1, 1),
@@ -103,7 +103,7 @@ def main(stud_ans):
     q = X_new.shape[1]
     #X_new.get_support()
     #X_test = [[0 for x in range(m)] for y in range(n)]
-    X_test = lil_matrix((n,q)) 
+    X_test = lil_matrix((n,q))
     for i in range(0,n):
         X_test[i] = X_new[i]
     for i in range(0,n):
@@ -118,7 +118,7 @@ def main(stud_ans):
     print "infogain", p[0]
     return p
 
-   
+
 if __name__ == "__main__":
     stud_ans = raw_input("Enter answer: ")
     main([stud_ans])
