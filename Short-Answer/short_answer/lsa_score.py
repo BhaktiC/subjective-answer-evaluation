@@ -37,9 +37,9 @@ def preprocessor(s):
     return news
 
 
-def main(stud_ans):
+def main(stud_ans, train_ans):
 
-    op = rd.read_data("train.tsv")
+    op = rd.read_data(train_ans)
     X_train_raw = op[0]
     y_train_labels = op[1]
     X_test_raw = []
@@ -61,11 +61,11 @@ def main(stud_ans):
 #     document length on the tf-idf values.
     vectorizer = TfidfVectorizer(max_df=0.75, max_features=5000,
                              min_df=2, stop_words='english', ngram_range=(1, 1),
-                             use_idf=True, preprocessor=None)
+                             use_idf=True, preprocessor=preprocessor)
     # vectorizer = CountVectorizer(max_df=0.5, min_df=0.01, ngram_range=(1, 1),
     #                                  max_features=10000,
     #                                  stop_words='english')
-    
+
 # Build the tfidf vectorizer from the training data ("fit"), and apply it
 # ("transform").
     X_train_tfidf = vectorizer.fit_transform(X_train_raw)
