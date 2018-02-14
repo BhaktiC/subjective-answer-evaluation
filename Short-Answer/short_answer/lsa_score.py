@@ -70,7 +70,7 @@ def main(stud_ans, train_ans):
 # ("transform").
     X_train_tfidf = vectorizer.fit_transform(X_train_raw)
 
-    print("  Actual number of tfidf features: %d" % X_train_tfidf.get_shape()[1])
+    # print("  Actual number of tfidf features: %d" % X_train_tfidf.get_shape()[1])
 
     #print("\nPerforming dimensionality reduction using LSA")
 

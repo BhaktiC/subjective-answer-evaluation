@@ -19,6 +19,7 @@ import uuid
 
 
 def index(request):
+    print request.user.is_authenticated()
     if request.user.is_authenticated():
         if request.session['isStudent']==True:
             return HttpResponseRedirect('/short_answer/student_home')
@@ -241,10 +242,10 @@ def viewscore(request):
     for i in range (len(ques_nos_list)):
         train_file = QuestionBank.objects.get(id = ques_nos_list[i]).train_file
         student_answer = stud_ans[i]
+        print "Scores for this iteration (Tf-idf, Lsa, Ig) as follows:"
         scores_this_iteration = driver2.main(train_file, student_answer)
         final_score_list.append(scores_this_iteration)
     template = loader.get_template('short_answer/viewscore.html')
-    print final_score_list
     return HttpResponseRedirect('/short_answer/')
 #     scores = driver.main(stud_ans)
 #     context = {
