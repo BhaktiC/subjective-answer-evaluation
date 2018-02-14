@@ -115,7 +115,7 @@ var x = setInterval(function() {
   <ol>
     {% for question in question_list %}
     <h3><li> {{ question.question_text}}</li></h3>
-    <textarea class="form-control" id="{{question.id}}" name="ans" cols="100" rows="5" oncopy="return false" onpaste="return false" ></textarea>
+    <textarea class="form-control" id="{{question.id}}" name="ans" cols="100" rows="5" oncopy="return true" onpaste="return true" ></textarea>
     {% endfor%}
   </ol>
   {% else %}
