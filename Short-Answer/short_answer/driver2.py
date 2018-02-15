@@ -32,7 +32,6 @@ def main(train_file, stud_ans):
     n = len(ig_res)
     #return {"key":key_res, "cd":cd_res, "tfidf":tfidf_res, "lsa": lsa_res, "ig":ig_res}
     return {"tfidf":tfidf_res, "lsa": lsa_res, "ig":ig_res}
-    return result
 
 def test_accuracy(result, scores, testdata):
     #acc = {"key": 0.0, "cd": 0.0, "tfidf": 0.0, "lsa": 0.0, "ig":0.0}
@@ -43,8 +42,6 @@ def test_accuracy(result, scores, testdata):
         for key in result:
             if scores[i] == result[key][i]:
                 acc[key] = acc[key] + 1
-
-    print "SD"
     for key in acc:
         acc[key] = (acc[key]/n)*100
 

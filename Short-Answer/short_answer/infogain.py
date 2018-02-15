@@ -12,16 +12,21 @@ import operator
 import nltk
 from sklearn.neighbors import KNeighborsClassifier
 from nltk.tokenize import word_tokenize
+import string
+import CosineDistance as cd
+import lsa_score as lsa
 
 from sklearn.utils import check_X_y
 
 ps = nltk.stem.PorterStemmer()
 
 def preprocessor(s):
+    s = s.translate(string.punctuation)
     news = ""
     word_tokens = word_tokenize(s)
+    cd.remove_stopwords(word_tokens)
     for word in word_tokens:
-         news = news + ps.stem(s)
+         news = news + " " + ps.stem(s)
     return news
 
 def delete_row_csr(mat, i):
@@ -47,11 +52,16 @@ def main(stud_ans, train_file):
         target.extend("4")
     op = rd.read_data(train_file)
     data.extend(op[0])
+    data1 = []
+    for ans in data:
+        modif_ans = lsa.replace_with_syn(ans)
+        data1.append(modif_ans)
+    data = data1
     target.extend(op[1])
     cv = CountVectorizer(max_df=0.75, min_df=2,ngram_range=(1, 1),
                                      max_features=10000,
                                      stop_words='english',
-                                     preprocessor=None)
+                                     preprocessor=preprocessor)
     X_vec = cv.fit_transform(data)
     print X_vec.shape
     #mutual_info_classif(X_vec, target, discrete_features=True)

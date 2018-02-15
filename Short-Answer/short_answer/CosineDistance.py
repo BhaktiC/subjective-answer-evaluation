@@ -25,7 +25,7 @@ def remove_stopwords(word_tokens):
     filtered_sentence = []
     for w in word_tokens:
         if w.lower() not in stop_words:
-            filtered_sentence.append(spell(w))
+            filtered_sentence.append(w.lower())
     return filtered_sentence
 
 def autocorrect_and_stem(sentence):
@@ -65,7 +65,7 @@ def synonym_merge(vector1, vector2):
         for sy in synonyms:
             stemmedsy = ps.stem(sy)
             if stemmedsy in vector2:
-                #print "%s is being replaced by %s" % (stemmedsy, stemmedkey)
+                print "%s is being replaced by %s" % (stemmedsy, stemmedkey)
                 count = vector2[stemmedsy]
                 vector2cp.update({stemmedkey:count})
                 del vector2cp[stemmedsy]
@@ -92,14 +92,13 @@ def get_cosine_dist(vector1, vector2):
         return 0
 
 
-
 def main(stud_ans):
     ques = "Starting with mRNA leaving the nucleus, list and describe four major steps involved in protein synthesis."
     model_ans = "After the mRNA leave the nucleus, there are four other major steps involved in protein synthesis. First, a tRNA attaches to the strand of mRNA. The first codon of nucleotide bases on the mRNA match the codon on the tRNA. The tRNA codes for an amino acid. Next, another tRNA connects to the next codon, bringing in another amino acid. The first tRNA floats away, leaving the amino acid behind. The amino acids bond. This continues, creating a strand of amino acids, until a stop codon is reached. Then the chain of amino acids is released."
     model_ans = remove_punctuation(model_ans)
     word_tokens = word_tokenize(model_ans)
     filtered_sentence = remove_stopwords(word_tokens)
-    #stemmed_sentence = autocorrect_and_stem(filtered_sentence)
+    stemmed_sentence = autocorrect_and_stem(filtered_sentence)
     stemmed_sentence = filtered_sentence
     model_vector = generate_vector(stemmed_sentence)
     stud_ans = remove_punctuation(stud_ans)
@@ -110,13 +109,13 @@ def main(stud_ans):
     stud_vector = synonym_merge(model_vector, stud_vector)
     model_vector = stem_vector(model_vector)
     result = get_cosine_dist(model_vector, stud_vector)
-    #print "TF vector of model answer"
-    #print model_vector
-    #print "TF vector of student answer"
-    #print stud_vector
-    #print "Result using Cosine Distance"
+    print "TF vector of model answer"
+    print model_vector
+    print "TF vector of student answer"
+    print stud_vector
+    print "Result using Cosine Distance"
     result = round(result*3,0)
-    #print "cosine", result
+    print "cosine", result
     return result
 
 if __name__ == "__main__":
