@@ -38,6 +38,7 @@ def test_accuracy(result, scores, testdata):
     #acc = {"tfidf": 0.0, "lsa": 0.0, "ig":0.0, "modif":0.0}
     acc = {"tfidf": 0.0, "lsa": 0.0, "ig":0.0}
     n = len(scores)
+
     for i in range(0, n):
         for key in result:
             if scores[i] == result[key][i]:

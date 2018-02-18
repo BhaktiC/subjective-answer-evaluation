@@ -242,8 +242,10 @@ def viewscore(request):
     for i in range (len(ques_nos_list)):
         train_file = QuestionBank.objects.get(id = ques_nos_list[i]).train_file
         student_answer = stud_ans[i]
-        print "Scores for this iteration (Tf-idf, Lsa, Ig) as follows:"
-        scores_this_iteration = driver2.main(train_file, student_answer)
+        print "Evaluating answer no. " + str(i)
+        print "Training file used is " + str(train_file)
+        scores_this_iteration = driver2.main(train_file, [student_answer])
+        # print scores_this_iteration
         final_score_list.append(scores_this_iteration)
     template = loader.get_template('short_answer/viewscore.html')
     return HttpResponseRedirect('/short_answer/')
