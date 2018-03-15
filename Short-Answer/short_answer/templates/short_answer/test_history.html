@@ -90,8 +90,10 @@ tr:nth-child(even) {
       <!-- <span class="logo" id="timer"></span> -->
       <nav class="navigation" role="navigation">
         <ul class="primary-nav">
-          
-          <li><a href="{%url 'logout'%}">Logout</a></li>
+          <li><a href="{%url 'teacher_home' %}">Home</a></li>
+  				<li><a href="{%url 'test_history' %}">Your Tests</a></li>
+   			 <li><a href="/short_answer/about/">About Us</a></li>
+   			 <li><a href="{%url 'logout' %}">Logout</a></li>
         </ul>
       </nav>
       <a href="#" class="nav-toggle">Menu<span></span></a> </div>
@@ -143,26 +145,7 @@ tr:nth-child(even) {
 </section>
 <!-- description text section -->
 <!-- footer -->
-<footer class="section footer">
-  <div class="footer-bottom">
-    <div class="container">
-      <div class="col-md-12">
-        <p>
-        <ul class="footer-share">
-          <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-          <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-          <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-          <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-          <li><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
-          <li><a href="#"><i class="fa fa-vimeo"></i></a></li>
-        </ul>
-        </p>
-        <p>© 2015 All rights reserved. All Rights Reserved<br>
-          Made with <i class="fa fa-heart pulse"></i> by <a href="http://kamalchaneman.com/">Designstub</a></p>
-      </div>
-    </div>
-  </div>
-</footer>
+
 <!-- footer -->
 
 <!-- JS FILES -->
@@ -175,4 +158,3 @@ tr:nth-child(even) {
 <script src="{% static 'short_answer/js/main.js'%}"></script>
 </body>
 </html>
-
