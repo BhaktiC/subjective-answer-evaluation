@@ -239,21 +239,27 @@ def viewscore(request):
     ques_nos_string = test_instance.question_nos
     ques_nos_list = ques_nos_string.split(",")
     final_score_list = []
+    scores = []
     for i in range (len(ques_nos_list)):
         train_file = QuestionBank.objects.get(id = ques_nos_list[i]).train_file
         student_answer = stud_ans[i]
         print "Evaluating answer no. " + str(i)
         print "Training file used is " + str(train_file)
-        scores_this_iteration = driver2.main(train_file, [student_answer])
-        # print scores_this_iteration
-        final_score_list.append(scores_this_iteration)
+        scores.append(driver2.main(train_file, [student_answer]))
+
+
+    score1_LSA = scores[0]['lsa']
+    score1_IG = scores[0]['ig']
+    score2_LSA = scores[1]['lsa']
+    score2_IG = scores[1]['ig']
     template = loader.get_template('short_answer/viewscore.html')
-    return HttpResponseRedirect('/short_answer/')
-#     scores = driver.main(stud_ans)
-#     context = {
-# 'scores': scores,
-# }
-#     return HttpResponse(template.render(context, request))
+    context = {
+'score1_LSA': str(score1_LSA[0]),
+'score1_IG' : str(score1_IG[0]),
+'score2_LSA' : str(score2_LSA[0]),
+'score2_IG' : str(score2_IG[0])
+}
+    return HttpResponse(template.render(context, request))
 
 
 @login_required

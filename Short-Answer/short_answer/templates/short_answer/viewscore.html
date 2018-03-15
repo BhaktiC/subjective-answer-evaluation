@@ -123,31 +123,26 @@ tr:nth-child(even) {
                 <thead>
                     <tr class="filters">
                         <th><input type="text" class="form-control" placeholder="Evaluation Technique" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Score" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Score for Answer 1" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Score for Answer 2" disabled></th>
+
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
 
-                        <td>Keyword Matching</td>
-                        <td>{{ scores.0 }}</td>
-                    </tr>
-				  <tr>
-					<td>Cosine Similarity</td>
-					<td>{{ scores.1 }}</td>
-				  </tr>
-				  <tr>
-					<td>K Nearest Neighbours</td>
-					<td>{{ scores.2 }}</td>
-				  </tr>
-				  <tr>
-					<td>LSA(Latent Semantic Analysis)</td>
-					<td>{{ scores.3 }}</td>
-				  </tr>
-				  <tr>
-					<td>TF-IDF</td>
-					<td>{{ scores.4 }}</td>
-				  </tr>
+        				  <tr>
+        					<td>LSA(Latent Semantic Analysis)</td>
+        					<td>{{ score1_LSA }}</td>
+                  <td>{{ score2_LSA }}</td>
+        				  </tr>
+
+        				  <tr>
+        					<td>Information Gain</td>
+        					<td>{{ score1_IG}}</td>
+                  <td>{{ score2_IG}}</td>
+        				  </tr>
+
+
                 </tbody>
             </table>
         </div>
