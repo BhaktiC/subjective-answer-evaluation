@@ -14,6 +14,18 @@
   //   alert("Are you sure you want to start the test? Once the test begins, you are not permitted to press back or refresh. Click Ok to start the test");
   //
   // }
+
+
+  window.onload = function(){
+    if(localStorage.getItem("back_count") == null || localStorage.getItem("back_count") == undefined)
+      localStorage.setItem("back_count", 0);
+
+    if(localStorage.getItem("reload_count") == null || localStorage.getItem("reload_count") == undefined)
+      localStorage.setItem("reload_count", 0);
+
+      if(localStorage.getItem("tab_switch_count") == null || localStorage.getItem("tab_switch_count") == undefined)
+        localStorage.setItem("tab_switch_count", 0);
+  }
   </script>
 <meta charset="utf-8">
 <meta name="description" content="">
@@ -59,7 +71,8 @@
         <h1>Welcome!</h1><br><br>
         <a href="/short_answer/student_test/">
           <span class="btn"
-          onclick="if (confirm('Are you sure you want to start the test? Once the test begins, you are not permitted to press back or refresh. Click Ok to start the test')) return true; return false">I'm Ready! Take me to the test.</span>
+          onclick="if (confirm('Are you sure you want to start the test? Once the test begins, you are not permitted to:\n 1) Press back button \n 2) Press refresh button \n 3) Leave the page or switch tabs \n If you do any of the above, your activity will be recorded and sent to the concerned teacher. \n Click Ok to start the test')) return true; return false">
+          I'm Ready! Take me to the test.</span>
         </a>
         <!-- banner text -->
       </div>

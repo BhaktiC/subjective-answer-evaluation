@@ -65,14 +65,14 @@ def main(stud_ans, train_file):
     X_vec = cv.fit_transform(data)
     print X_vec.shape
     #mutual_info_classif(X_vec, target, discrete_features=True)
-    selector = SelectKBest(mutual_info_classif, k=450)
+    selector = SelectKBest(mutual_info_classif, k=432)
     X_new = selector.fit_transform(X_vec, target)
     print X_new.shape
     q = X_new.shape[1]
     #X_new.get_support()
     #X_test = [[0 for x in range(m)] for y in range(n)]
 
-    X_test = lil_matrix((n,q))  
+    X_test = lil_matrix((n,q))
 
     for i in range(0,n):
         X_test[i] = X_new[i]

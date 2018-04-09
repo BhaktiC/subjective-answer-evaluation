@@ -234,6 +234,9 @@ def student_test(request):
 
 def viewscore(request):
     stud_ans = request.POST.getlist('ans')
+    reload_count = request.POST.get('reload_count')
+    back_count = request.POST.get('back_count')
+    tab_switch_count = request.POST.get('tab_switch_count')
     test_code = request.session['test_code']
     test_instance = Test.objects.get(test_code = test_code)
     ques_nos_string = test_instance.question_nos
@@ -243,15 +246,18 @@ def viewscore(request):
     for i in range (len(ques_nos_list)):
         train_file = QuestionBank.objects.get(id = ques_nos_list[i]).train_file
         student_answer = stud_ans[i]
+        print student_answer
         print "Evaluating answer no. " + str(i)
         print "Training file used is " + str(train_file)
         scores.append(driver2.main(train_file, [student_answer]))
 
 
+    print scores
     score1_LSA = scores[0]['lsa']
     score1_IG = scores[0]['ig']
     score2_LSA = scores[1]['lsa']
     score2_IG = scores[1]['ig']
+
     template = loader.get_template('short_answer/viewscore.html')
     context = {
 'score1_LSA': str(score1_LSA[0]),

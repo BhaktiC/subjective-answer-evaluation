@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE HTML>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
@@ -39,7 +39,40 @@ margin-left:135px;
 <link rel="stylesheet" href="{% static 'short_answer/css/animate.min.css' %}">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"> </script>
+
 <script>
+// after reload
+
+history.pushState({}, '', '');
+var switch_tab = 0;
+
+if (performance.navigation.type == 1) {
+  cnt = parseInt(localStorage.getItem("reload_count"));
+  cnt += 1;
+  localStorage.setItem("reload_count", cnt);
+  // console.log("Reload count is");
+  // console.log(localStorage.getItem("reload_count"));
+  }
+
+$(window).blur(function() {
+  cnt = parseInt(localStorage.getItem("tab_switch_count"));
+  cnt += 1;
+  localStorage.setItem("tab_switch_count", cnt);
+  // console.log("Reload count is");
+  // console.log(localStorage.getItem("reload_count"));
+
+});
+
+
+
+window.onpopstate = function(event){
+  cnt = parseInt(localStorage.getItem("back_count"));
+  cnt += 1;
+  localStorage.setItem("back_count", cnt);
+  // alert("Your activity has been recorded.");
+  // console.log(localStorage.getItem('back_count'));
+};
 
 var start = new Date();
 //adding two hours to start time
@@ -69,6 +102,14 @@ var x = setInterval(function() {
 
       }
 }, 1000);
+
+function checkLog(){
+  console.log("Value of Reload_count " + localStorage.getItem("reload_count"));
+  console.log("Value of Back_count " + localStorage.getItem("back_count"));
+  console.log("Value of Tab_switches " + localStorage.getItem("tab_switch_count"));
+  document.getElementById('reload_count').value = localStorage.getItem("reload_count");
+
+}
 </script>
 
 
@@ -106,6 +147,9 @@ var x = setInterval(function() {
 <section id="inner-description" class="section inner-description">
 
         <form method="post" action="{%url 'view_score' %}"  name="cform" id="cform">
+          <input type="hidden" name="reload_count" id="reload_count" >
+          <input type="hidden" name="back_count" id="back_count">
+          <input type="hidden" name="tab_switch_count" id="tab_switch_count">
 
           <!-- <input name="name" id="name" type="text" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" placeholder="Your name..." >
           <input name="email" id="email" type="email" class=" col-xs-12 col-sm-12 col-md-12 col-lg-12 noMarr" placeholder="Email Address..." >
@@ -124,7 +168,7 @@ var x = setInterval(function() {
 <br>
 
 			<br><br><br>
-		  <input class="button" type="submit" name="submit_btn" value="Submit">
+		  <input class="button" type="submit" onclick="checkLog()" name="submit_btn" value="Submit">
           <div id="simple-msg"></div>
         </form>
 

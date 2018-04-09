@@ -72,15 +72,15 @@ def main(stud_ans, train_ans):
     traindata = op[0]
     trainscore = op[1]
     testdata = stud_ans
-    # testdata1 = []
-    # for ans in testdata:
-    #     testdata1.append(str(replace_with_syn(ans)))
-    # testdata = testdata1
-    # traindata1 = []
-    # for ans in traindata:
-    #     modif_ans = str(replace_with_syn(ans))
-    #     traindata1.append(modif_ans)
-    # traindata = traindata1
+    testdata1 = []
+    for ans in testdata:
+        testdata1.append(str(replace_with_syn(ans)))
+    testdata = testdata1
+    traindata1 = []
+    for ans in traindata:
+        modif_ans = str(replace_with_syn(ans))
+        traindata1.append(modif_ans)
+    traindata = traindata1
 
 
 ###############################################################################
