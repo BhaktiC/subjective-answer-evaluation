@@ -44,34 +44,27 @@ margin-left:135px;
 <script>
 // after reload
 
+function increment_localstorage(key){
+  cnt = parseInt(localStorage.getItem(key));
+  cnt += 1;
+  localStorage.setItem(key, cnt);
+};
+
+
 history.pushState({}, '', '');
-var switch_tab = 0;
 
 if (performance.navigation.type == 1) {
-  cnt = parseInt(localStorage.getItem("reload_count"));
-  cnt += 1;
-  localStorage.setItem("reload_count", cnt);
-  // console.log("Reload count is");
-  // console.log(localStorage.getItem("reload_count"));
+  increment_localstorage("reload_count")
   }
 
 $(window).blur(function() {
-  cnt = parseInt(localStorage.getItem("tab_switch_count"));
-  cnt += 1;
-  localStorage.setItem("tab_switch_count", cnt);
-  // console.log("Reload count is");
-  // console.log(localStorage.getItem("reload_count"));
-
+  increment_localstorage("tab_switch_count");
 });
 
 
 
 window.onpopstate = function(event){
-  cnt = parseInt(localStorage.getItem("back_count"));
-  cnt += 1;
-  localStorage.setItem("back_count", cnt);
-  // alert("Your activity has been recorded.");
-  // console.log(localStorage.getItem('back_count'));
+  localStorage.setItem("back_pressed", "true");
 };
 
 var start = new Date();
@@ -105,9 +98,12 @@ var x = setInterval(function() {
 
 function checkLog(){
   console.log("Value of Reload_count " + localStorage.getItem("reload_count"));
-  console.log("Value of Back_count " + localStorage.getItem("back_count"));
+  console.log("Back button pressed?: " + localStorage.getItem("back_pressed"));
   console.log("Value of Tab_switches " + localStorage.getItem("tab_switch_count"));
   document.getElementById('reload_count').value = localStorage.getItem("reload_count");
+  document.getElementById('back_pressed').value = localStorage.getItem("back_pressed");
+  document.getElementById('tab_switch_count').value = localStorage.getItem("tab_switch_count");
+
 
 }
 </script>
@@ -148,7 +144,7 @@ function checkLog(){
 
         <form method="post" action="{%url 'view_score' %}"  name="cform" id="cform">
           <input type="hidden" name="reload_count" id="reload_count" >
-          <input type="hidden" name="back_count" id="back_count">
+          <input type="hidden" name="back_pressed" id="back_pressed">
           <input type="hidden" name="tab_switch_count" id="tab_switch_count">
 
           <!-- <input name="name" id="name" type="text" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" placeholder="Your name..." >

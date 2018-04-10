@@ -235,8 +235,16 @@ def student_test(request):
 def viewscore(request):
     stud_ans = request.POST.getlist('ans')
     reload_count = request.POST.get('reload_count')
-    back_count = request.POST.get('back_count')
+    back_pressed = request.POST.get('back_pressed')
     tab_switch_count = request.POST.get('tab_switch_count')
+
+    print "reload count is "
+    print reload_count
+    print "back pressed?"
+    print back_pressed
+    print "tab_switch_count"
+    print tab_switch_count
+    
     test_code = request.session['test_code']
     test_instance = Test.objects.get(test_code = test_code)
     ques_nos_string = test_instance.question_nos

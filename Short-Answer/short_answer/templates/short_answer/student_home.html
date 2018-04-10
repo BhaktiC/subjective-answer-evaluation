@@ -10,15 +10,10 @@
 
 
   <script>
-  // function confirm(){
-  //   alert("Are you sure you want to start the test? Once the test begins, you are not permitted to press back or refresh. Click Ok to start the test");
-  //
-  // }
-
 
   window.onload = function(){
-    if(localStorage.getItem("back_count") == null || localStorage.getItem("back_count") == undefined)
-      localStorage.setItem("back_count", 0);
+    if(localStorage.getItem("back_pressed") == null || localStorage.getItem("back_pressed") == undefined)
+      localStorage.setItem("back_pressed", "false");
 
     if(localStorage.getItem("reload_count") == null || localStorage.getItem("reload_count") == undefined)
       localStorage.setItem("reload_count", 0);
