@@ -16,11 +16,13 @@ import driver2
 import knn
 import CosineDistance
 import uuid
+import math
 
 
 def index(request):
-    print request.user.is_authenticated()
     if request.user.is_authenticated():
+        if "isStudent" not in request.session.keys():
+            logout(request)
         if request.session['isStudent']==True:
             return HttpResponseRedirect('/short_answer/student_home')
         else:
@@ -244,13 +246,14 @@ def viewscore(request):
     print back_pressed
     print "tab_switch_count"
     print tab_switch_count
-    
+
     test_code = request.session['test_code']
     test_instance = Test.objects.get(test_code = test_code)
     ques_nos_string = test_instance.question_nos
     ques_nos_list = ques_nos_string.split(",")
     final_score_list = []
     scores = []
+    s_email = request.session['s_email']
     for i in range (len(ques_nos_list)):
         train_file = QuestionBank.objects.get(id = ques_nos_list[i]).train_file
         student_answer = stud_ans[i]
@@ -260,18 +263,27 @@ def viewscore(request):
         scores.append(driver2.main(train_file, [student_answer]))
 
 
-    print scores
     score1_LSA = scores[0]['lsa']
+    score1_LSA = int(score1_LSA[0])
     score1_IG = scores[0]['ig']
+    score1_IG = int(score1_IG[0])
     score2_LSA = scores[1]['lsa']
+    score2_LSA = int(score2_LSA[0])
     score2_IG = scores[1]['ig']
-
+    score2_IG = int(score2_IG[0])
+    final_score1 = int(math.ceil( ( flaot(score1_LSA) + float(score1_IG) ) / 2 ))
+    final_score2 = int(math.ceil( ( float(score2_LSA) + float(score2_IG) ) / 2 ))
+    # marks = str(final_score1.append(",").append(final_score2))
+    marks = str(final_score1) + ", " + str(final_score2)
+    print "Final marks are "
+    print marks
+    test_result = Test_Result.objects.create(test = test_instance, user_email = s_email, test_marks = marks, reload_count = str(reload_count), back_pressed =  str(back_pressed), tab_switch_count = str(tab_switch_count) )
     template = loader.get_template('short_answer/viewscore.html')
     context = {
-'score1_LSA': str(score1_LSA[0]),
-'score1_IG' : str(score1_IG[0]),
-'score2_LSA' : str(score2_LSA[0]),
-'score2_IG' : str(score2_IG[0])
+'score1_LSA': str(score1_LSA),
+'score1_IG' : str(score1_IG),
+'score2_LSA' : str(score2_LSA),
+'score2_IG' : str(score2_IG)
 }
     return HttpResponse(template.render(context, request))
 

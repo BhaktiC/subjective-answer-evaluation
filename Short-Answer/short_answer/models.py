@@ -4,14 +4,7 @@ from django.forms import ModelForm
 from django import forms
 
 class UserProfile(models.Model):
-        # ROLE_CHOICES = (
-        #    ('Teacher', 'Teacher'),
-        #    ('Student', 'Student')
-        # )
-
-        # This field is required.
         user = models.OneToOneField(User, on_delete=models.CASCADE)
-        # These fields are optional
         isStudent = models.BooleanField()
         def __unicode__(self):
                 return self.user.username
@@ -29,3 +22,14 @@ class Test(models.Model):
         created_by = models.ForeignKey(User, on_delete=models.CASCADE)
         def __unicode__(self):
             return self.test_code
+
+
+class Test_Result(models.Model):
+        test = models.ForeignKey(Test, on_delete = models.CASCADE)
+        user_email = models.CharField(max_length = 50, unique = False)
+        test_marks = models.CharField(max_length = 50)
+        reload_count = models.CharField(max_length = 10)
+        back_pressed = models.CharField(max_length = 10)
+        tab_switch_count = models.CharField(max_length = 10)
+        def __unicode__(self):
+            return self.test.test_code
