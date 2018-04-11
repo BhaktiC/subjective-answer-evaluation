@@ -271,7 +271,7 @@ def viewscore(request):
     score2_LSA = int(score2_LSA[0])
     score2_IG = scores[1]['ig']
     score2_IG = int(score2_IG[0])
-    final_score1 = int(math.ceil( ( flaot(score1_LSA) + float(score1_IG) ) / 2 ))
+    final_score1 = int(math.ceil( ( float(score1_LSA) + float(score1_IG) ) / 2 ))
     final_score2 = int(math.ceil( ( float(score2_LSA) + float(score2_IG) ) / 2 ))
     # marks = str(final_score1.append(",").append(final_score2))
     marks = str(final_score1) + ", " + str(final_score2)
@@ -287,11 +287,26 @@ def viewscore(request):
 }
     return HttpResponse(template.render(context, request))
 
+def test_result(request, test_id):
+
+    s_email = request.session['t_email']
+    test_instance = Test.objects.get(id = test_id)
+    test_result = Test_Result.objects.filter( test = test_instance )
+    # print test_result.user_email
+    # for test in Test_Result.objects.filter()
+    for test in test_result:
+        print test.user_email
+
+    template = loader.get_template('short_answer/test_result.html')
+    context = {'reload_count' : 1}
+    return HttpResponse(template.render(context, request))
+
+
 
 @login_required
 def user_logout(request):
     # Since we know the user is logged in, we can now just log them out.
     logout(request)
-
     # Take the user back to the homepage.
-    return HttpResponseRedirect('/short_answer/')
+    # return HttpResponse('/short_answer/')
+    return render(request, '/short_answer/')

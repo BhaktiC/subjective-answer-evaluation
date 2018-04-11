@@ -131,8 +131,8 @@ tr:nth-child(even) {
                 </thead>
                 <tbody>
 {% for test in tests %}
-<tr><td><a href="/short_answer/test_history/{{test.id}}">{{test.date_created}}</td>
-<td>  {{test.test_code}} </td></tr>
+<tr><td><a href="/short_answer/test_history/{{test.id}}">{{test.date_created}} </td>
+<td>  {{test.test_code}}     <a href="/short_answer/test_history/test_result/{{test.id}}"><input type="button" value="See result"></input> </a></td></tr>
 {% endfor %}
 </tbody>
             </table>
