@@ -307,6 +307,4 @@ def test_result(request, test_id):
 def user_logout(request):
     # Since we know the user is logged in, we can now just log them out.
     logout(request)
-    # Take the user back to the homepage.
-    # return HttpResponse('/short_answer/')
-    return render(request, '/short_answer/')
+    return HttpResponseRedirect('/short_answer/')

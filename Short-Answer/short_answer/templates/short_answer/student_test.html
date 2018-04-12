@@ -67,45 +67,64 @@ window.onpopstate = function(event){
   localStorage.setItem("back_pressed", "true");
 };
 
-var start = new Date();
-//adding two hours to start time
-var countDownDate = new Date();
-countDownDate.setMinutes( start.getMinutes() + 30 )
-var x = setInterval(function() {
 
-    // Get todays date and time
-    var now = new Date();
+var x = setInterval(function(){ myTimer() }, 1000);
 
-    // Find the distance between now an the count down date
-    var distance = countDownDate - now;
+    if(typeof localStorage.getItem("min") !== 'undefined' && typeof localStorage.getItem("sec") !== 'undefined' && localStorage.getItem("min")!= null && localStorage.getItem("sec")!= null ){
+        var min = localStorage.getItem("min");
+        var sec = localStorage.getItem("sec");
+    }
+    else {
+       console.log("c2");
+       var min = "0"+0;
+       var sec = "0"+30;
+    }
+    var time;
 
-    // Time calculations for days, hours, minutes and seconds
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    function myTimer(){
 
-    document.getElementById("timer").innerHTML = hours + "h "
-    + minutes + "m " + seconds + "s ";
+        localStorage.setItem("min", min);
+        localStorage.setItem("sec", sec);
+        time= min +" : "+ sec;
+        document.getElementById("timer").innerHTML = time ;
+        if(sec == 00)
+        {
+            if(min !=0)
+            {
+                min--;
+                sec=59;
+                if(min < 10)
+                {
+                    min="0"+min;
+                }
+            }
 
-    // If the count down is over, write some text
-    if (distance <= 0) {
-        clearInterval(x);
-        alert("Time up! Press Ok to submit.");
-        document.getElementById("cform").submit();
+            else{
+              clearInterval(x);
+              alert("Time up! Press Ok to submit.");
+              document.getElementById("cform").submit();
+            }
+        }
 
-      }
-}, 1000);
+        else
+        {
+            sec--;
+            if(sec < 10)
+            {
+                sec="0"+sec;
+            }
+        }
 
-function checkLog(){
-  console.log("Value of Reload_count " + localStorage.getItem("reload_count"));
-  console.log("Back button pressed?: " + localStorage.getItem("back_pressed"));
-  console.log("Value of Tab_switches " + localStorage.getItem("tab_switch_count"));
-  document.getElementById('reload_count').value = localStorage.getItem("reload_count");
-  document.getElementById('back_pressed').value = localStorage.getItem("back_pressed");
-  document.getElementById('tab_switch_count').value = localStorage.getItem("tab_switch_count");
+    }
+
+    function stop_timer() {
+      clearInterval(x);
+      console.log("Pressed");
+    }
 
 
-}
+
+
 </script>
 
 
@@ -118,13 +137,6 @@ function checkLog(){
     <!-- navigation section  -->
     <div class="header-content clearfix">
       <span class="logo" id="timer"></span>
-      <!-- <nav class="navigation" role="navigation">
-        <ul class="primary-nav">
-          <li><a href="/short_answer/shome/">Home</a></li>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="/short_answer/logout/">Logout</a></li>
-        </ul>
-      </nav> -->
       <a href="#" class="nav-toggle">Menu<span></span></a> </div>
     <!-- navigation section  -->
   </header>
@@ -142,7 +154,7 @@ function checkLog(){
 <!-- description text section -->
 <section id="inner-description" class="section inner-description">
 
-        <form method="post" action="{%url 'view_score' %}"  name="cform" id="cform">
+        <form method="post" action="{%url 'view_score' %}" name="cform" id="cform">
           <input type="hidden" name="reload_count" id="reload_count" >
           <input type="hidden" name="back_pressed" id="back_pressed">
           <input type="hidden" name="tab_switch_count" id="tab_switch_count">
@@ -164,7 +176,7 @@ function checkLog(){
 <br>
 
 			<br><br><br>
-		  <input class="button" type="submit" onclick="checkLog()" name="submit_btn" value="Submit">
+		  <input class="button" type="submit" id="submit_test" onclick="stop_timer()" name="submit_btn" value="Submit">
           <div id="simple-msg"></div>
         </form>
 
