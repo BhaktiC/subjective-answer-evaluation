@@ -15,7 +15,9 @@ from nltk.tokenize import word_tokenize
 import string
 import CosineDistance as cd
 import lsa_score as lsa
-
+from sklearn.decomposition import TruncatedSVD
+from sklearn.pipeline import make_pipeline, Pipeline
+from sklearn.preprocessing import Normalizer
 from sklearn.utils import check_X_y
 
 ps = nltk.stem.PorterStemmer()
@@ -47,46 +49,54 @@ def main(stud_ans, train_file):
     n = len(stud_ans)
     target = []
     data = []
-    data.extend(stud_ans)
+    data.extend(stud_ans) #test answers
     for i in range(0,n):
         target.extend("4")
     op = rd.read_data(train_file)
-    data.extend(op[0])
-    data1 = []
-    for ans in data:
-        modif_ans = lsa.replace_with_syn(ans)
-        data1.append(modif_ans)
-    data = data1
+    data.extend(op[0]) #test+train answers
+    m = len(op[0])
+    data1 = [] 
+    # for ans in data:
+    #     modif_ans = lsa.replace_with_syn(ans)
+    #     data1.append(modif_ans)
+    # data = data1 #test+train with synonym replacement
     target.extend(op[1])
     cv = CountVectorizer(max_df=0.75, min_df=2,ngram_range=(1, 1),
                                      max_features=10000,
                                      stop_words='english',
                                      preprocessor=preprocessor)
-    X_vec = cv.fit_transform(data)
+    X_vec = cv.fit_transform(data) #after vectorizing
     print X_vec.shape
     #mutual_info_classif(X_vec, target, discrete_features=True)
     selector = SelectKBest(mutual_info_classif, k=450)
-    X_new = selector.fit_transform(X_vec, target)
+    X_new = selector.fit_transform(X_vec, target) #after selecting k best based on info gain
     print X_new.shape
     q = X_new.shape[1]
-    #X_new.get_support()
-    #X_test = [[0 for x in range(m)] for y in range(n)]
 
     X_test = lil_matrix((n,q))  
 
     for i in range(0,n):
-        X_test[i] = X_new[i]
-    for i in range(0,n):
+        X_test[i] = X_new[0]
         delete_row_csr(X_new, 0)
         del target[0]
+
+    X_train = X_new
+
+    X_train_lsa = X_train
+    X_test_lsa = X_test
+    
+    #perform lsa
+    svd = TruncatedSVD(25)
+    lsaa = make_pipeline(svd, Normalizer(copy=False))
+    X_train_lsa = lsaa.fit_transform(X_train)
+    X_test_lsa = lsaa.transform(X_test)
+        
     knn = KNeighborsClassifier(n_neighbors=2, algorithm='brute', metric='cosine')
-    knn.fit(X_new, target)
-    #print X_test
+    knn.fit(X_train_lsa, target)
     # Classify the test vectors.
-    p = knn.predict(X_test)
+    p = knn.predict(X_test_lsa)
     float(p[0])
     print "infogain", p[0]
-    #print cv.vocabulary_
     return p
 
 

@@ -39,14 +39,16 @@ def replace_with_syn(ans):
     word_tokens = cd.remove_stopwords(word_tokens)
     for word in word_tokens:
         flag = 0
-        neww = ps.stem(word)
+        neww = word
+        #neww = ps.stem(word)
         if neww not in keyset and word not in ["one", "two", "three", "four", "single", "second", "ones", "us", "ex", "seconds"] :
             syn = cd.get_synonyms(word)
             for s in syn:
-                sstem = ps.stem(s)
+                #sstem = ps.stem(s)
+                sstem = s
                 if sstem in keyset:
                     neww = sstem
-                    print "%s is being replaced by %s" % (word, s)
+                    #print "%s is being replaced by %s" % (word, s)
                     flag = 1
                     break 
             if flag == 0:
@@ -111,7 +113,7 @@ def main(stud_ans, train_ans):
 # Project the tfidf vectors onto the first N principal components.
 # Though this is significantly fewer features than the original tfidf vector,
 # they are stronger features, and the accuracy is higher.
-    svd = TruncatedSVD(X_train_tfidf.shape[1] - 1)
+    svd = TruncatedSVD(100)
     lsa = make_pipeline(svd, Normalizer(copy=False))
 
 # Run SVD on the training data, then project the training data.
