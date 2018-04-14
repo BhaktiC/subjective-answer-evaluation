@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE HTML>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
@@ -39,36 +39,92 @@ margin-left:135px;
 <link rel="stylesheet" href="{% static 'short_answer/css/animate.min.css' %}">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"> </script>
+
 <script>
+// after reload
 
-var start = new Date();
-//adding two hours to start time
-var countDownDate = new Date();
-countDownDate.setMinutes( start.getMinutes() + 30 )
-var x = setInterval(function() {
+function increment_localstorage(key){
+  cnt = parseInt(localStorage.getItem(key));
+  cnt += 1;
+  localStorage.setItem(key, cnt);
+};
 
-    // Get todays date and time
-    var now = new Date();
 
-    // Find the distance between now an the count down date
-    var distance = countDownDate - now;
+history.pushState({}, '', '');
 
-    // Time calculations for days, hours, minutes and seconds
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+if (performance.navigation.type == 1) {
+  increment_localstorage("reload_count")
+  }
 
-    document.getElementById("timer").innerHTML = hours + "h "
-    + minutes + "m " + seconds + "s ";
+$(window).blur(function() {
+  increment_localstorage("tab_switch_count");
+});
 
-    // If the count down is over, write some text
-    if (distance <= 0) {
-        clearInterval(x);
-        alert("Time up! Press Ok to submit.");
-        document.getElementById("cform").submit();
 
-      }
-}, 1000);
+
+window.onpopstate = function(event){
+  localStorage.setItem("back_pressed", "true");
+};
+
+
+var x = setInterval(function(){ myTimer() }, 1000);
+
+    if(typeof localStorage.getItem("min") !== 'undefined' && typeof localStorage.getItem("sec") !== 'undefined' && localStorage.getItem("min")!= null && localStorage.getItem("sec")!= null ){
+        var min = localStorage.getItem("min");
+        var sec = localStorage.getItem("sec");
+    }
+    else {
+       console.log("c2");
+       var min = "0"+0;
+       var sec = "0"+30;
+    }
+    var time;
+
+    function myTimer(){
+
+        localStorage.setItem("min", min);
+        localStorage.setItem("sec", sec);
+        time= min +" : "+ sec;
+        document.getElementById("timer").innerHTML = time ;
+        if(sec == 00)
+        {
+            if(min !=0)
+            {
+                min--;
+                sec=59;
+                if(min < 10)
+                {
+                    min="0"+min;
+                }
+            }
+
+            else{
+              clearInterval(x);
+              alert("Time up! Press Ok to submit.");
+              document.getElementById("cform").submit();
+            }
+        }
+
+        else
+        {
+            sec--;
+            if(sec < 10)
+            {
+                sec="0"+sec;
+            }
+        }
+
+    }
+
+    function stop_timer() {
+      clearInterval(x);
+      console.log("Pressed");
+    }
+
+
+
+
 </script>
 
 
@@ -81,13 +137,6 @@ var x = setInterval(function() {
     <!-- navigation section  -->
     <div class="header-content clearfix">
       <span class="logo" id="timer"></span>
-      <!-- <nav class="navigation" role="navigation">
-        <ul class="primary-nav">
-          <li><a href="/short_answer/shome/">Home</a></li>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="/short_answer/logout/">Logout</a></li>
-        </ul>
-      </nav> -->
       <a href="#" class="nav-toggle">Menu<span></span></a> </div>
     <!-- navigation section  -->
   </header>
@@ -105,7 +154,10 @@ var x = setInterval(function() {
 <!-- description text section -->
 <section id="inner-description" class="section inner-description">
 
-        <form method="post" action="{%url 'view_score' %}"  name="cform" id="cform">
+        <form method="post" action="{%url 'view_score' %}" name="cform" id="cform">
+          <input type="hidden" name="reload_count" id="reload_count" >
+          <input type="hidden" name="back_pressed" id="back_pressed">
+          <input type="hidden" name="tab_switch_count" id="tab_switch_count">
 
           <!-- <input name="name" id="name" type="text" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" placeholder="Your name..." >
           <input name="email" id="email" type="email" class=" col-xs-12 col-sm-12 col-md-12 col-lg-12 noMarr" placeholder="Email Address..." >
@@ -124,7 +176,7 @@ var x = setInterval(function() {
 <br>
 
 			<br><br><br>
-		  <input class="button" type="submit" name="submit_btn" value="Submit">
+		  <input class="button" type="submit" id="submit_test" onclick="stop_timer()" name="submit_btn" value="Submit">
           <div id="simple-msg"></div>
         </form>
 
@@ -132,26 +184,7 @@ var x = setInterval(function() {
 </section>
 <!-- description text section -->
 <!-- footer -->
-<footer class="section footer">
-  <div class="footer-bottom">
-    <div class="container">
-      <div class="col-md-12">
-        <p>
-        <ul class="footer-share">
-          <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-          <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-          <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-          <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-          <li><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
-          <li><a href="#"><i class="fa fa-vimeo"></i></a></li>
-        </ul>
-        </p>
-        <p>© 2015 All rights reserved. All Rights Reserved<br>
-          Made with <i class="fa fa-heart pulse"></i> by <a href="http://kamalchaneman.com/">Designstub</a></p>
-      </div>
-    </div>
-  </div>
-</footer>
+
 <!-- footer -->
 
 <!-- JS FILES -->

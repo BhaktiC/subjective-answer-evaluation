@@ -48,9 +48,9 @@ def replace_with_syn(ans):
                 sstem = s
                 if sstem in keyset:
                     neww = sstem
-                    #print "%s is being replaced by %s" % (word, s)
+                    # print "%s is being replaced by %s" % (word, s)
                     flag = 1
-                    break 
+                    break
             if flag == 0:
                 keyset.append(str(neww))
         news = str(news) + " " + str(neww)
@@ -74,17 +74,17 @@ def main(stud_ans, train_ans):
     traindata = op[0]
     trainscore = op[1]
     testdata = stud_ans
-    # testdata1 = []
-    # for ans in testdata:
-    #     testdata1.append(str(replace_with_syn(ans)))
-    # testdata = testdata1
-    # traindata1 = []
-    # for ans in traindata:
-    #     modif_ans = str(replace_with_syn(ans))
-    #     traindata1.append(modif_ans)
-    # traindata = traindata1
-    
-   
+    testdata1 = []
+    for ans in testdata:
+        testdata1.append(str(replace_with_syn(ans)))
+    testdata = testdata1
+    traindata1 = []
+    for ans in traindata:
+        modif_ans = str(replace_with_syn(ans))
+        traindata1.append(modif_ans)
+    traindata = traindata1
+
+
 ###############################################################################
 #  Use LSA to vectorize the articles.
 ###############################################################################

@@ -39,6 +39,7 @@ def test_accuracy(result, scores, testdata):
     acc = {"tfidf": 0.0, "lsa": 0.0, "ig":0.0}
     accmodif = 0
     n = len(scores)
+
     for i in range(0, n):
         s = (0.5 * float(result['lsa'][i]) + 0.5 * float(result['ig'][i]))
         s = int(round(s,0))

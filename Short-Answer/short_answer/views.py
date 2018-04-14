@@ -16,11 +16,13 @@ import driver2
 import knn
 import CosineDistance
 import uuid
+import math
 
 
 def index(request):
-    print request.user.is_authenticated()
     if request.user.is_authenticated():
+        if "isStudent" not in request.session.keys():
+            logout(request)
         if request.session['isStudent']==True:
             return HttpResponseRedirect('/short_answer/student_home')
         else:
@@ -234,30 +236,75 @@ def student_test(request):
 
 def viewscore(request):
     stud_ans = request.POST.getlist('ans')
+    reload_count = request.POST.get('reload_count')
+    back_pressed = request.POST.get('back_pressed')
+    tab_switch_count = request.POST.get('tab_switch_count')
+
+    print "reload count is "
+    print reload_count
+    print "back pressed?"
+    print back_pressed
+    print "tab_switch_count"
+    print tab_switch_count
+
     test_code = request.session['test_code']
     test_instance = Test.objects.get(test_code = test_code)
     ques_nos_string = test_instance.question_nos
     ques_nos_list = ques_nos_string.split(",")
     final_score_list = []
+    scores = []
+    s_email = request.session['s_email']
     for i in range (len(ques_nos_list)):
         train_file = QuestionBank.objects.get(id = ques_nos_list[i]).train_file
         student_answer = stud_ans[i]
-        print "Scores for this iteration (Tf-idf, Lsa, Ig) as follows:"
-        scores_this_iteration = driver2.main(train_file, student_answer)
-        final_score_list.append(scores_this_iteration)
+        print student_answer
+        print "Evaluating answer no. " + str(i)
+        print "Training file used is " + str(train_file)
+        scores.append(driver2.main(train_file, [student_answer]))
+
+
+    score1_LSA = scores[0]['lsa']
+    score1_LSA = int(score1_LSA[0])
+    score1_IG = scores[0]['ig']
+    score1_IG = int(score1_IG[0])
+    score2_LSA = scores[1]['lsa']
+    score2_LSA = int(score2_LSA[0])
+    score2_IG = scores[1]['ig']
+    score2_IG = int(score2_IG[0])
+    final_score1 = int(math.ceil( ( float(score1_LSA) + float(score1_IG) ) / 2 ))
+    final_score2 = int(math.ceil( ( float(score2_LSA) + float(score2_IG) ) / 2 ))
+    # marks = str(final_score1.append(",").append(final_score2))
+    marks = str(final_score1) + ", " + str(final_score2)
+    print "Final marks are "
+    print marks
+    test_result = Test_Result.objects.create(test = test_instance, user_email = s_email, test_marks = marks, reload_count = str(reload_count), back_pressed =  str(back_pressed), tab_switch_count = str(tab_switch_count) )
     template = loader.get_template('short_answer/viewscore.html')
-    return HttpResponseRedirect('/short_answer/')
-#     scores = driver.main(stud_ans)
-#     context = {
-# 'scores': scores,
-# }
-#     return HttpResponse(template.render(context, request))
+    context = {
+'score1_LSA': str(score1_LSA),
+'score1_IG' : str(score1_IG),
+'score2_LSA' : str(score2_LSA),
+'score2_IG' : str(score2_IG)
+}
+    return HttpResponse(template.render(context, request))
+
+def test_result(request, test_id):
+
+    s_email = request.session['t_email']
+    test_instance = Test.objects.get(id = test_id)
+    test_result = Test_Result.objects.filter( test = test_instance )
+    # print test_result.user_email
+    # for test in Test_Result.objects.filter()
+    for test in test_result:
+        print test.user_email
+
+    template = loader.get_template('short_answer/test_result.html')
+    context = {'reload_count' : 1}
+    return HttpResponse(template.render(context, request))
+
 
 
 @login_required
 def user_logout(request):
     # Since we know the user is logged in, we can now just log them out.
     logout(request)
-
-    # Take the user back to the homepage.
     return HttpResponseRedirect('/short_answer/')

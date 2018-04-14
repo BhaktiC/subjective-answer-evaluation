@@ -38,7 +38,11 @@
 <link rel="stylesheet" href="{% static 'short_answer/css/responsive.css' %}">
 <link rel="stylesheet" href="{% static 'short_answer/css/animate.min.css' %}">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-
+<script>
+function test_create_success(){
+	alert("Test created successfully! Visit the \"Your tests\" section to see details of all your tests.");
+}
+</script>
 </head>
 
 <body>
@@ -91,7 +95,7 @@
 {% endif %}
 		<br><br><br>
 
-		  <input class="button submitBnt" type="submit" id="submit" name="Submit"
+		  <input class="button submitBnt" onclick="test_create_success()" type="submit" id="submit" name="Submit"
 			value="Create Test">
           <div id="simple-msg"></div>
 
@@ -101,26 +105,7 @@
 </section>
 <!-- description text section -->
 <!-- footer -->
-<footer class="section footer">
-  <div class="footer-bottom">
-    <div class="container">
-      <div class="col-md-12">
-        <p>
-        <ul class="footer-share">
-          <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-          <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-          <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-          <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-          <li><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
-          <li><a href="#"><i class="fa fa-vimeo"></i></a></li>
-        </ul>
-        </p>
-        <p>© 2015 All rights reserved. All Rights Reserved<br>
-          Made with <i class="fa fa-heart pulse"></i> by <a href="http://kamalchaneman.com/">Designstub</a></p>
-      </div>
-    </div>
-  </div>
-</footer>
+
 <!-- footer -->
 
 <!-- JS FILES -->
