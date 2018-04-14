@@ -68,14 +68,14 @@ def main(stud_ans, train_file):
         data1.append(modif_ans)
     testdata = data1 #test with synonym replacement
     traintarget.extend(op[1])
-    cv = CountVectorizer(max_df=0.75, min_df=2,ngram_range=(1, 1),
+    cv = CountVectorizer(ngram_range=(1, 1),
                                      max_features=10000,
                                      stop_words='english',
                                      preprocessor=preprocessor)
     X_vec = cv.fit_transform(traindata) #after vectorizing
     print X_vec.shape
     #mutual_info_classif(X_vec, target, discrete_features=True)
-    selector = SelectKBest(mutual_info_classif, k=432)
+    selector = SelectKBest(mutual_info_classif, k=300)
     X_train = selector.fit_transform(X_vec, traintarget)
     X_test = cv.transform(testdata)
     X_test = selector.transform(X_test)
