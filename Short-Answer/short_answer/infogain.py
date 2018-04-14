@@ -47,54 +47,52 @@ def delete_row_csr(mat, i):
 
 def main(stud_ans, train_file):
     n = len(stud_ans)
-    target = []
-    data = []
-    data.extend(stud_ans) #test answers
+    testtarget = []
+    testdata = []
+    testdata.extend(stud_ans) #test answers
     for i in range(0,n):
-        target.extend("4")
+        testtarget.extend("4")
     op = rd.read_data(train_file)
-    data.extend(op[0]) #test+train answers
+    traindata = []
+    traintarget = []
+    traindata.extend(op[0]) #test+train answers
     m = len(op[0])
     data1 = [] 
-    # for ans in data:
-    #     modif_ans = lsa.replace_with_syn(ans)
-    #     data1.append(modif_ans)
-    # data = data1 #test+train with synonym replacement
-    target.extend(op[1])
+    for ans in traindata:
+        modif_ans = lsa.replace_with_syn(ans)
+        data1.append(modif_ans)
+    traindata = data1 #train with synonym replacement
+    data1 = []
+    for ans in testdata:
+        modif_ans = lsa.replace_with_syn(ans)
+        data1.append(modif_ans)
+    testdata = data1 #test with synonym replacement
+    traintarget.extend(op[1])
     cv = CountVectorizer(max_df=0.75, min_df=2,ngram_range=(1, 1),
                                      max_features=10000,
                                      stop_words='english',
                                      preprocessor=preprocessor)
-    X_vec = cv.fit_transform(data) #after vectorizing
+    X_vec = cv.fit_transform(traindata) #after vectorizing
     print X_vec.shape
     #mutual_info_classif(X_vec, target, discrete_features=True)
     selector = SelectKBest(mutual_info_classif, k=432)
-    X_new = selector.fit_transform(X_vec, target)
-    print X_new.shape
-    q = X_new.shape[1]
-
-    X_test = lil_matrix((n,q))
-
-    for i in range(0,n):
-        X_test[i] = X_new[0]
-        delete_row_csr(X_new, 0)
-        del target[0]
-
-    X_train = X_new
-
-    X_train_lsa = X_train
-    X_test_lsa = X_test
+    X_train = selector.fit_transform(X_vec, traintarget)
+    X_test = cv.transform(testdata)
+    X_test = selector.transform(X_test)
+   
+    # X_train_lsa = X_train
+    # X_test_lsa = X_test
     
-    #perform lsa
-    svd = TruncatedSVD(25)
-    lsaa = make_pipeline(svd, Normalizer(copy=False))
-    X_train_lsa = lsaa.fit_transform(X_train)
-    X_test_lsa = lsaa.transform(X_test)
+    # #perform lsa
+    # svd = TruncatedSVD(25)
+    # lsaa = make_pipeline(svd, Normalizer(copy=False))
+    # X_train_lsa = lsaa.fit_transform(X_train)
+    # X_test_lsa = lsaa.transform(X_test)
         
     knn = KNeighborsClassifier(n_neighbors=2, algorithm='brute', metric='cosine')
-    knn.fit(X_train_lsa, target)
+    knn.fit(X_train, traintarget)
     # Classify the test vectors.
-    p = knn.predict(X_test_lsa)
+    p = knn.predict(X_test)
     float(p[0])
     print "infogain", p[0]
     return p
