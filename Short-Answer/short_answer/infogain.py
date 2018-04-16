@@ -57,7 +57,7 @@ def main(stud_ans, train_file):
     traintarget = []
     traindata.extend(op[0]) #test+train answers
     m = len(op[0])
-    data1 = [] 
+    data1 = []
     for ans in traindata:
         modif_ans = lsa.replace_with_syn(ans)
         data1.append(modif_ans)
@@ -79,16 +79,16 @@ def main(stud_ans, train_file):
     X_train = selector.fit_transform(X_vec, traintarget)
     X_test = cv.transform(testdata)
     X_test = selector.transform(X_test)
-   
+
     # X_train_lsa = X_train
     # X_test_lsa = X_test
-    
+
     # #perform lsa
     # svd = TruncatedSVD(25)
     # lsaa = make_pipeline(svd, Normalizer(copy=False))
     # X_train_lsa = lsaa.fit_transform(X_train)
     # X_test_lsa = lsaa.transform(X_test)
-        
+
     knn = KNeighborsClassifier(n_neighbors=2, algorithm='brute', metric='cosine')
     knn.fit(X_train, traintarget)
     # Classify the test vectors.

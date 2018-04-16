@@ -64,11 +64,15 @@ if __name__ == "__main__":
     start = time.time()
     testdata = []
     scores = []
-    op = rd.read_data("test_wn.csv")
+    test_file = raw_input("Enter test file: ")
+    op = rd.read_data(test_file)
+    #test answers
     testdata = op[0]
+    #scores of those answers
     scores = op[1]
+    train_file = raw_input("Enter train file: ")
     blockPrint()
-    result = main("train.tsv", testdata)
+    result = main(train_file, testdata)
     enablePrint()
     acc = test_accuracy(result, scores, testdata)
     print "accuracy"

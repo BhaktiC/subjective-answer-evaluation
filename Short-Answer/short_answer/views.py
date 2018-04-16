@@ -235,6 +235,7 @@ def student_test(request):
             return render(request, 'short_answer/student_test.html', context)
 
 def viewscore(request):
+
     stud_ans = request.POST.getlist('ans')
     reload_count = request.POST.get('reload_count')
     back_pressed = request.POST.get('back_pressed')
@@ -292,13 +293,11 @@ def test_result(request, test_id):
     s_email = request.session['t_email']
     test_instance = Test.objects.get(id = test_id)
     test_result = Test_Result.objects.filter( test = test_instance )
-    # print test_result.user_email
-    # for test in Test_Result.objects.filter()
     for test in test_result:
         print test.user_email
 
     template = loader.get_template('short_answer/test_result.html')
-    context = {'reload_count' : 1}
+    context = {'test_result' : test_result}
     return HttpResponse(template.render(context, request))
 
 

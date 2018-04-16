@@ -48,6 +48,7 @@ function increment_localstorage(key){
   cnt = parseInt(localStorage.getItem(key));
   cnt += 1;
   localStorage.setItem(key, cnt);
+  console.log("incrementing value of " + key);
 };
 
 
@@ -60,8 +61,6 @@ if (performance.navigation.type == 1) {
 $(window).blur(function() {
   increment_localstorage("tab_switch_count");
 });
-
-
 
 window.onpopstate = function(event){
   localStorage.setItem("back_pressed", "true");
@@ -76,8 +75,8 @@ var x = setInterval(function(){ myTimer() }, 1000);
     }
     else {
        console.log("c2");
-       var min = "0"+0;
-       var sec = "0"+30;
+       var min = "0"+30;
+       var sec = "0"+ 0;
     }
     var time;
 
@@ -120,6 +119,14 @@ var x = setInterval(function(){ myTimer() }, 1000);
     function stop_timer() {
       clearInterval(x);
       console.log("Pressed");
+      console.log("reload_count " + localStorage.getItem("reload_count"));
+      console.log("back pressed? " + localStorage.getItem("back_pressed"));
+      console.log("tab switch count " + localStorage.getItem("tab_switch_count"));
+
+      document.getElementById('reload_count').value = localStorage.getItem("reload_count");
+      document.getElementById('tab_switch_count').value = localStorage.getItem("tab_switch_count");
+      document.getElementById('back_pressed').value = localStorage.getItem("back_pressed");
+
     }
 
 
@@ -153,8 +160,8 @@ var x = setInterval(function(){ myTimer() }, 1000);
 <!-- header section -->
 <!-- description text section -->
 <section id="inner-description" class="section inner-description">
-
-        <form method="post" action="{%url 'view_score' %}" name="cform" id="cform">
+<form method="post" action="{%url 'view_score' %}" name="cform" id="cform">
+  <!-- ACTIVITY LOG VALUES -->
           <input type="hidden" name="reload_count" id="reload_count" >
           <input type="hidden" name="back_pressed" id="back_pressed">
           <input type="hidden" name="tab_switch_count" id="tab_switch_count">
