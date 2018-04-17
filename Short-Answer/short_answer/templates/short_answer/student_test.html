@@ -43,6 +43,7 @@ margin-left:135px;
 
 <script>
 // after reload
+var test_duration = "{{ test_duration }}"
 
 function increment_localstorage(key){
   cnt = parseInt(localStorage.getItem(key));
@@ -75,7 +76,7 @@ var x = setInterval(function(){ myTimer() }, 1000);
     }
     else {
        console.log("c2");
-       var min = "0"+30;
+       var min = "0" + test_duration;
        var sec = "0"+ 0;
     }
     var time;

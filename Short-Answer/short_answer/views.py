@@ -45,11 +45,12 @@ def question_bank(request):
                     while True:
                         try:
                             selected_ques_list = request.POST.getlist('checkbox')
+                            test_duration = request.POST.get('test_duration')
                             selected_ques = ','.join(selected_ques_list)
                             print selected_ques
                             testCode = uuid.uuid4().hex[:6].upper()
                             teacher_instance = User.objects.get(id = request.session['pkey'])
-                            test_instance = Test.objects.create(test_code = testCode, question_nos = selected_ques, created_by = teacher_instance)
+                            test_instance = Test.objects.create(test_code = testCode, test_duration= test_duration, question_nos = selected_ques, created_by = teacher_instance)
                             return HttpResponseRedirect('/short_answer/teacher_home/')
                         except IntegrityError as e:
                             continue
@@ -226,12 +227,13 @@ def student_test(request):
         else:
             test_code = request.session['test_code']
             test_instance = Test.objects.get(test_code = test_code)
+            test_duration = test_instance.test_duration
             ques_nos_string = test_instance.question_nos
             ques_nos_list = ques_nos_string.split(",")
             question_list = []
             for i in range (len(ques_nos_list)):
                 question_list.append(QuestionBank.objects.get(id = ques_nos_list[i]))
-            context = {'question_list' : question_list}
+            context = {'question_list' : question_list, 'test_duration' : test_duration}
             return render(request, 'short_answer/student_test.html', context)
 
 def viewscore(request):

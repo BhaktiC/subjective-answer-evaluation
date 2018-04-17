@@ -17,6 +17,7 @@ class QuestionBank(models.Model):
 
 class Test(models.Model):
         test_code = models.CharField(max_length = 6, unique = True)
+        test_duration = models.CharField(max_length = 3, default = 30)
         question_nos = models.CharField(max_length = 20)
         date_created = models.DateTimeField(auto_now_add = True)
         created_by = models.ForeignKey(User, on_delete=models.CASCADE)
