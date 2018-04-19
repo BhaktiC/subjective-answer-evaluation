@@ -122,22 +122,37 @@ tr:nth-child(even) {
             </div>
 <!-- <body> -->
 <table class="table">
-                <thead>
-                    <tr class="filters">
-                        <th><input type="text" class="form-control" placeholder="col 1" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="col 2" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="col 3" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="col 4" disabled></th>
-						<th><input type="text" class="form-control" placeholder="col 5" disabled></th>
 
-                    </tr>
-                </thead>
-                <tbody>
+                  {% if test_result %}
+                  <thead>
+                      <tr class="filters">
+                          <th><input type="text" class="form-control" placeholder="Email" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Marks" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Reload Count" disabled></th>
+                          <th><input type="text" class="form-control" placeholder="Tab Switch Count" disabled></th>
+  						             <th><input type="text" class="form-control" placeholder="Back Pressed?" disabled></th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  {% for test in test_result %}
+                  <tr>
+                  <td>{{test.user_email}}</td>
+                  <td>{{test.test_marks}}</td>
+                  <td>{{test.reload_count}}</td>
+                  <td>{{test.tab_switch_count}}</td>
+                  <td>{{test.back_pressed}}</td>
+                  {% endfor %}
+                  </tr>
+                  
+                  {% else  %}
 
-<tr><td>1</td>
-<td>  2</td><td>3</td><td>4</td><td>5</td></tr>
+                  <h3> No results for this test </h3>
 
-</tbody>
+                  {% endif %}
+
+
+
+                </tbody>
             </table>
         </div>
     </div>

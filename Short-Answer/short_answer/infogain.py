@@ -71,7 +71,7 @@ def main(stud_ans, train_file):
     cv = CountVectorizer(ngram_range=(1, 1),
                                      max_features=10000,
                                      stop_words='english',
-                                     preprocessor=preprocessor)
+                                     preprocessor=preprocessor, max_df = 0.75, min_df = 2)
     X_vec = cv.fit_transform(traindata) #after vectorizing
     print X_vec.shape
     #mutual_info_classif(X_vec, target, discrete_features=True)

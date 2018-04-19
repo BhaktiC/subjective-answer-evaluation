@@ -12,7 +12,7 @@ def enablePrint():
 
 def main(stud_ans, train_file):
     lsa_res = []
-    blockPrint()
+    # blockPrint()
     ig_res = ig.main(stud_ans, train_file)
     res = lsa.main(stud_ans, train_file)
     lsa_res = res[1]
@@ -21,6 +21,8 @@ def main(stud_ans, train_file):
     print lsa_res
     print "IG result is : "
     print ig_res
+    return {"lsa": lsa_res, "ig":ig_res}
+
 
 if __name__ == "__main__":
     train_file = raw_input("Enter train file ")

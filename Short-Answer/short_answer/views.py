@@ -12,15 +12,24 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from short_answer.models import *
 
-import driver2
+import driver2, driver
 import knn
 import CosineDistance
 import uuid
 import math
+import csv, os, sys
+
+
+def blockPrint():
+    sys.stdout = open(os.devnull, 'w')
+
+def enablePrint():
+    sys.stdout = sys.__stdout__
 
 
 def index(request):
     if request.user.is_authenticated():
+        print "authenticated"
         if "isStudent" not in request.session.keys():
             logout(request)
         if request.session['isStudent']==True:
@@ -28,6 +37,7 @@ def index(request):
         else:
             return HttpResponseRedirect('/short_answer/teacher_home')
     else:
+        print "not authenticated"
         return render(request, 'short_answer/index.html')
 
 def question_bank(request):
@@ -260,12 +270,13 @@ def viewscore(request):
     for i in range (len(ques_nos_list)):
         train_file = QuestionBank.objects.get(id = ques_nos_list[i]).train_file
         student_answer = stud_ans[i]
-        print student_answer
         print "Evaluating answer no. " + str(i)
         print "Training file used is " + str(train_file)
-        scores.append(driver2.main(train_file, [student_answer]))
+        # blockPrint()
+        scores.append(driver.main([student_answer], train_file))
+        enablePrint()
 
-
+    print scores
     score1_LSA = scores[0]['lsa']
     score1_LSA = int(score1_LSA[0])
     score1_IG = scores[0]['ig']

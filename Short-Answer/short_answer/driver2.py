@@ -71,9 +71,9 @@ if __name__ == "__main__":
     #scores of those answers
     scores = op[1]
     train_file = raw_input("Enter train file: ")
-    blockPrint()
+    # blockPrint()
     result = main(train_file, testdata)
-    enablePrint()
+    # enablePrint()
     acc = test_accuracy(result, scores, testdata)
     print "accuracy"
     for key in acc:
