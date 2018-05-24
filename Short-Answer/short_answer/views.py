@@ -11,14 +11,16 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from short_answer.models import *
+from glob import glob; from os.path import expanduser
 
 import driver2, driver
 import knn
 import CosineDistance
 import uuid
 import math
-import csv, os, sys
+import csv, os, sys, sqlite3
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def blockPrint():
     sys.stdout = open(os.devnull, 'w')
@@ -293,6 +295,7 @@ def viewscore(request):
     print marks
     test_result = Test_Result.objects.create(test = test_instance, user_email = s_email, test_marks = marks, reload_count = str(reload_count), back_pressed =  str(back_pressed), tab_switch_count = str(tab_switch_count) )
     template = loader.get_template('short_answer/viewscore.html')
+
     context = {
 'score1_LSA': str(score1_LSA),
 'score1_IG' : str(score1_IG),
@@ -306,10 +309,21 @@ def test_result(request, test_id):
     s_email = request.session['t_email']
     test_instance = Test.objects.get(id = test_id)
     test_result = Test_Result.objects.filter( test = test_instance )
-    for test in test_result:
-        print test.user_email
-
+    test_code = test_instance.test_code
+    test_id = test_id
     template = loader.get_template('short_answer/test_result.html')
+    # NEW FEATURE START
+    # conn = sqlite3.connect(os.path.join(BASE_DIR, 'db.sqlite3'))
+    # cursor = conn.cursor()
+    # file_name = test_instance.test_code + "results.csv"
+    # cursor.execute("select * from 'short_answer_test_result' where id = test_id ")
+    # print(cursor.fetchall())
+    # with open(file_name, "wb") as csv_file:
+    #     csv_writer = csv.writer(csv_file)
+    #     csv_writer.writerow([i[0] for i in cursor.description]) # write headers
+    #     csv_writer.writerows(cursor)
+    # NEW FEATURE END
+
     context = {'test_result' : test_result}
     return HttpResponse(template.render(context, request))
 

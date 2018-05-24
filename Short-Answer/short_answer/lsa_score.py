@@ -119,7 +119,6 @@ def main(stud_ans, train_ans):
 # Run SVD on the training data, then project the training data.
     X_train_lsa = lsa.fit_transform(X_train_tfidf)
 
-
     #explained_variance = svd.explained_variance_ratio_.sum()
     #print("  Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
 

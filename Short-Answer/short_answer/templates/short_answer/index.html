@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html >
 <head>
+  {% load staticfiles %}
   <meta charset="UTF-8">
   <title>Login Form</title>
 <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
@@ -9,8 +10,17 @@
 
 
       <style>
-body {
+
+
+/*body {
     background: url('http://thcsluongthevinh.pgdkienxuongtbh.edu.vn/upload/37646/20171202/0183105.jpg') no-repeat  center center;
+    background-size: cover;
+    font-family: Montserrat;
+}*/
+
+body {
+
+    background: url( '{% static 'short_answer/images/Login-page.jpg'%}' ) no-repeat center center;
     background-size: cover;
     font-family: Montserrat;
 }
@@ -128,7 +138,7 @@ display: none;
 
   }
 
-  
+
 
   </script>
 
