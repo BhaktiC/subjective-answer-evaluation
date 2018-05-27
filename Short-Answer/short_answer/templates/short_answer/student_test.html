@@ -34,7 +34,7 @@ margin-left:135px;
     bottom: 0;
     left: 0;
     right: 0;
-    width: 1000px;
+    width: 100px;
     height: auto;
     margin: auto;
 	background-color: #6DB3F2;
@@ -150,24 +150,14 @@ var x = setInterval(function(){ myTimer() }, 1000);
 
     function showImage(){
         document.getElementById('loadingImage').style.visibility="visible";
+		document.getElementById('loadingImage').style.width="100px";
 		document.getElementById('txtt').style.visibility="visible";
-    document.getElementById('txtt').style.color="white";
-
+<<<<<<< HEAD
+=======
+>>>>>>> e55f19d4d13412e68a5cb725f182cb6cda5b231c
     }
 
-	myBlurFunction = function(state) {
-    /* state can be 1 or 0 */
-    var containerElement = document.getElementById('main_container');
-    //var overlayEle = document.getElementById('overlay');
 
-    if (state) {
-        overlayEle.style.display = 'block';
-        containerElement.setAttribute('class', 'blur');
-    } else {
-        overlayEle.style.display = 'none';
-        containerElement.setAttribute('class', null);
-    }
-};
 </script>
 
 
@@ -182,7 +172,8 @@ var x = setInterval(function(){ myTimer() }, 1000);
       <span class="logo" id="timer"></span>
 	  <center>
 	  <h2 id="txtt" style="visibility:hidden;color=blue;">Please Wait...</h2>
-	  <img id="loadingImage" src="http://i.stack.imgur.com/FhHRx.gif" style="visibility:hidden" alt="Please Wait"/>
+	 <!-- <img id="loadingImage" src="http://i.stack.imgur.com/FhHRx.gif" style="visibility:hidden" alt="Please Wait"/> -->
+	   <img id="loadingImage" src="{% static "short_answer/images/fancybox_loading@2x.gif" %}" style="visibility:hidden" alt="Please wait" />
 	  </center>
       <a href="#" class="nav-toggle">Menu<span></span></a> </div>
     <!-- navigation section  -->
