@@ -28,7 +28,7 @@ margin-left:135px;
 }
 
 .loadingImage {
-   
+
     position: fixed;
     top: 0;
     bottom: 0;
@@ -147,10 +147,12 @@ var x = setInterval(function(){ myTimer() }, 1000);
 
     }
 
-    
+
     function showImage(){
         document.getElementById('loadingImage').style.visibility="visible";
 		document.getElementById('txtt').style.visibility="visible";
+    document.getElementById('txtt').style.color="white";
+
     }
 
 	myBlurFunction = function(state) {
@@ -209,7 +211,7 @@ var x = setInterval(function(){ myTimer() }, 1000);
           <input name="email" id="email" type="email" class=" col-xs-12 col-sm-12 col-md-12 col-lg-12 noMarr" placeholder="Email Address..." >
           <textarea name="comments" id="comments" cols="" rows="" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" placeholder="Project Details..."></textarea> -->
 <div class="left col-xs-8 col-md-8 col-lg-8">
-	
+
   {% if question_list %}
   <ol>
     {% for question in question_list %}
@@ -217,15 +219,15 @@ var x = setInterval(function(){ myTimer() }, 1000);
     <textarea class="form-control" id="{{question.id}}" name="ans" cols="100" rows="5" oncopy="return true" onpaste="return true" ></textarea>
     {% endfor%}
   </ol>
-  
-  
+
+
   {% else %}
       <p>No questions are available for this test.</p>
   {% endif %}
 <br>
 
 			<br><br><br>
-			
+
 		  <div id="main_container">
 		 <input class="button" type="submit" id="submit_test" onclick="stop_timer(); showImage();" name="submit_btn" value="Submit">
           </div>
