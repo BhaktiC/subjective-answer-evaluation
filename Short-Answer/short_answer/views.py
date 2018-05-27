@@ -208,7 +208,7 @@ def test_detail(request, test_id):
 
 def about(request):
     if not request.user.is_authenticated():
-        context = {'home' : ''}
+        return HttpResponseRedirect('/short_answer/')
     else:
         if 't_email' in request.session:
             context = {'home' : 'teacher_home'}

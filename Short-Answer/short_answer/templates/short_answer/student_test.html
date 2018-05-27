@@ -26,6 +26,23 @@ margin-left:135px;
     margin: 5px 3px;
     cursor: pointer;
 }
+
+.loadingImage {
+   
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 1000px;
+    height: auto;
+    margin: auto;
+	background-color: #6DB3F2;
+}
+
+
+
+
 </style>
 <meta charset="utf-8">
 <meta name="description" content="">
@@ -130,9 +147,25 @@ var x = setInterval(function(){ myTimer() }, 1000);
 
     }
 
+    
+    function showImage(){
+        document.getElementById('loadingImage').style.visibility="visible";
+		document.getElementById('txtt').style.visibility="visible";
+    }
 
+	myBlurFunction = function(state) {
+    /* state can be 1 or 0 */
+    var containerElement = document.getElementById('main_container');
+    //var overlayEle = document.getElementById('overlay');
 
-
+    if (state) {
+        overlayEle.style.display = 'block';
+        containerElement.setAttribute('class', 'blur');
+    } else {
+        overlayEle.style.display = 'none';
+        containerElement.setAttribute('class', null);
+    }
+};
 </script>
 
 
@@ -145,6 +178,10 @@ var x = setInterval(function(){ myTimer() }, 1000);
     <!-- navigation section  -->
     <div class="header-content clearfix">
       <span class="logo" id="timer"></span>
+	  <center>
+	  <h2 id="txtt" style="visibility:hidden;color=blue;">Please Wait...</h2>
+	  <img id="loadingImage" src="http://i.stack.imgur.com/FhHRx.gif" style="visibility:hidden" alt="Please Wait"/>
+	  </center>
       <a href="#" class="nav-toggle">Menu<span></span></a> </div>
     <!-- navigation section  -->
   </header>
@@ -158,6 +195,7 @@ var x = setInterval(function(){ myTimer() }, 1000);
     </div>
   </div>
 </section>
+
 <!-- header section -->
 <!-- description text section -->
 <section id="inner-description" class="section inner-description">
@@ -171,6 +209,7 @@ var x = setInterval(function(){ myTimer() }, 1000);
           <input name="email" id="email" type="email" class=" col-xs-12 col-sm-12 col-md-12 col-lg-12 noMarr" placeholder="Email Address..." >
           <textarea name="comments" id="comments" cols="" rows="" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" placeholder="Project Details..."></textarea> -->
 <div class="left col-xs-8 col-md-8 col-lg-8">
+	
   {% if question_list %}
   <ol>
     {% for question in question_list %}
@@ -178,18 +217,25 @@ var x = setInterval(function(){ myTimer() }, 1000);
     <textarea class="form-control" id="{{question.id}}" name="ans" cols="100" rows="5" oncopy="return true" onpaste="return true" ></textarea>
     {% endfor%}
   </ol>
+  
+  
   {% else %}
       <p>No questions are available for this test.</p>
   {% endif %}
 <br>
 
 			<br><br><br>
-		  <input class="button" type="submit" id="submit_test" onclick="stop_timer()" name="submit_btn" value="Submit">
-          <div id="simple-msg"></div>
+			
+		  <div id="main_container">
+		 <input class="button" type="submit" id="submit_test" onclick="stop_timer(); showImage();" name="submit_btn" value="Submit">
+          </div>
+		  <div id="simple-msg"></div>
         </form>
 
 </div>
 </section>
+
+
 <!-- description text section -->
 <!-- footer -->
 
@@ -203,5 +249,6 @@ var x = setInterval(function(){ myTimer() }, 1000);
 <script src="{% static 'short_answer/js/retina.min.js'%}"></script>
 <script src="{% static 'short_answer/js/modernizr.js'%}"></script>
 <script src="{% static 'short_answer/js/main.js'%}"></script>
+
 </body>
 </html>
